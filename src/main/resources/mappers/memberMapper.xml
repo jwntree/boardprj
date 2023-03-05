@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+    <select id="memberList" resultType="com.co.spring02.vo.MemberVO">
+        SELECT 
+          userId, 
+          userName,
+          userEmail,
+          Regdate
+        FROM tbl_member
+        ORDER BY userName
+    </select>
+</mapper>
