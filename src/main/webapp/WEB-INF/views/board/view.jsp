@@ -12,7 +12,7 @@ $(document).ready(function(){
 
 	})
 	
-	$("#btnCancel").click(function(){
+	$("#btnList").click(function(){
 		location.href = "/board/list.do";
 	})
 	
@@ -46,7 +46,7 @@ function deletePost() {
     </div>
     <button type="button" id="btnUpdete">수정</button>
     <button type="button" id="btnDelete" onclick="deletePost()">삭제</button>
-    <button type="button" id="btnCancel">목록</button>
+    <button type="button" id="btnList">목록</button>
     
     
 </body>

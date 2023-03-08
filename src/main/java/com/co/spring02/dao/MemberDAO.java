@@ -2,9 +2,18 @@ package com.co.spring02.dao;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import com.co.spring02.vo.MemberVO;
 
 public interface MemberDAO {
+	
+	
+    // 회원 로그인 체크
+    public boolean loginCheck(MemberVO vo);
+    // 회원 로그인 정보
+    public MemberVO MemberInfo(MemberVO vo);
+    
 	 // 회원 목록 
     public List<MemberVO> memberList() throws Exception;
     // 회원 입력

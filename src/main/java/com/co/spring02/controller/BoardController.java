@@ -26,10 +26,19 @@ public class BoardController {
 	BoardService boardService;
 	
 	//게시글 리스트
-	@RequestMapping(value="list.do", method=RequestMethod.GET)
-	public String list(Model model) throws Exception{
-		List<BoardVO> list = boardService.list();
+	@RequestMapping(value="list.do")
+	public String list(@RequestParam(defaultValue="title") String searchOption,
+            @RequestParam(defaultValue="") String keyword,
+            @RequestParam(defaultValue="1") int curPage,
+            Model model) throws Exception{
+		int start = 0;
+		int end = 0;
+		List<BoardVO> list = boardService.list(searchOption, keyword,start,end);
+	    int count = boardService.countArticle(searchOption, keyword);
 		model.addAttribute("list", list);
+		model.addAttribute("count", count);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
         return "board/list";
 	}
 	

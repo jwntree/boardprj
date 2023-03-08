@@ -6,6 +6,13 @@
 </head>
 <body>
 <%@ include file="include/header.jsp" %>
-<h1>${msg}</h1>
+<c:choose>
+    <c:when test="${msg == 'success'}">
+    <h2>${sessionScope.userName}(${sessionScope.userId})님 환영합니다.</h2>
+    </c:when>
+    <c:otherwise>
+    <h1>${msg}</h1>
+    </c:otherwise>
+</c:choose>    
 </body>
 </html>

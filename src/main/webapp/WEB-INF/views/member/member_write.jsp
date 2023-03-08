@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입 페이지</title>
-<%@ include file="../include/member_header.jsp" %>
+<%@ include file="../include/header.jsp" %>
 <script>
     $(document).ready(function(){
         $("#btnUpdate").click(function(){

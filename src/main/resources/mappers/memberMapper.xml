@@ -26,6 +26,12 @@
           #{userEmail})
     </insert>
     
+    
+    <select id="loginCheck" resultType="String">
+        SELECT userName AS userName FROM tbl_member
+        WHERE userId = #{userId} AND userpw = #{userPw}
+    </select>
+    
     <select id="viewMember" resultType="com.co.spring02.vo.MemberVO">
         SELECT 
           userId,
@@ -35,6 +41,17 @@
           Updatedate
         FROM tbl_member
         WHERE userId = #{userId}
+    </select>
+    
+    <select id="MemberInfo" resultType="com.co.spring02.vo.MemberVO">
+        SELECT 
+          userId,
+          userName,
+          userEmail,
+          Regdate,
+          Updatedate
+        FROM tbl_member
+        WHERE userId = #{userId} AND userPw = #{userPw}
     </select>
     
     <update id="updateMember">
@@ -58,5 +75,7 @@
     	tbl_member
     	where userId = #{userId} and userPw = #{userPw}
     </select>
+   
+   
     
 </mapper>

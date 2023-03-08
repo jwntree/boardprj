@@ -5,6 +5,17 @@
 <a href="/">홈페이지</a>
 <a href="/member/list.do">회원관리</a>
 <a href="/board/list.do">게시물</a>
+<c:choose>
+    <c:when test="${sessionScope.userId == null}">
+        <a href="${path}/member/login.do">로그인</a>
+    </c:when>
+    <c:otherwise>
+    <div>
+        ${sessionScope.userName}님이 로그인중입니다.
+        <a href="${path}/member/logout.do">로그아웃</a>
+     </div>
+    </c:otherwise>
+</c:choose>
 
 
 

@@ -3,6 +3,7 @@ package com.co.spring02.controller;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,38 @@ public class MemberController {
 	
 	@Inject
 	BCryptPasswordEncoder pwdEncoder;
+	
+	
+	//로그인 화면
+	@RequestMapping("login.do")
+	public String login(HttpSession session) {
+		if(session.getAttribute("userId") == null) {
+			return "member/login";
+		}else {
+        	return "redirect:/";
+		}
+	}
+	//로그인 체크
+	@RequestMapping("loginCheck.do")
+	public String loginCheck(@ModelAttribute MemberVO vo, HttpSession session,Model model) {
+        boolean result = memberService.loginCheck(vo, session);
+        if(result) {
+        	model.addAttribute("msg", "success");
+        	return "main";
+        }else {
+        	model.addAttribute("msg", "failure");
+        	return "member/login";
+        }
+		
+	}
+	
+	//로그아웃 처리
+	@RequestMapping("logout.do")
+	public String logout(HttpSession session,Model model) {
+        memberService.logout(session);
+		model.addAttribute("msg","logout");
+		return "member/login";
+	}
 	
 	
 	// 01 회원 목록

@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>회원 목록</title>
-<%@ include file="../include/member_header.jsp" %>
+<%@ include file="../include/header.jsp" %>
 </head>
 <body>
     <h2>회원 목록</h2>

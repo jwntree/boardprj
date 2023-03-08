@@ -6,8 +6,34 @@
 <select id="list" resultType="com.co.spring02.vo.BoardVO">
 	select bno,title,content, writer,regdate,viewcnt 
 	from tbl_board
+	<!-- WHERE절을 include 태그로 삽입 -->
+    <include refid="search"></include>
 	order by bno desc
 </select>
+
+<!-- 01_02. 게시글 레코드 갯수 -->
+<select id="countArticle" resultType="int">
+    SELECT COUNT(*) FROM tbl_board
+    <!-- WHERE절을 include 태그로 삽입 -->
+    <include refid="search"></include>
+</select>
+
+<sql id="search">
+	<choose>
+		<!-- oracle 전용 concat 이용-->
+		<!-- 검색 옵션이 전체 검색일 경우 -->
+      <when test="searchOption == 'all'">
+            where writer like '%'||#{keyword}||'%'
+            or content like '%'||#{keyword}||'%'
+            or title like '%'||#{keyword}||'%'
+        </when>
+		<!-- 전체 검색이 아닐 경우  -->
+		<otherwise>
+		where ${searchOption} like '%'||#{keyword}||'%'
+		</otherwise>
+		
+	</choose>
+</sql>
 
 <insert id="insert">
 	insert into tbl_board

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,18 @@ public class MemberDAOImpl implements MemberDAO{
 
 	@Inject
     SqlSession sqlSession;
-	
+
+	@Override
+	public boolean loginCheck(MemberVO vo) {
+	       String name = sqlSession.selectOne("memberMapper.loginCheck", vo);
+	        return (name == null) ? false : true;
+	}
+
+	@Override
+    public MemberVO MemberInfo(MemberVO vo) {
+        return sqlSession.selectOne("memberMapper.MemberInfo", vo);
+	}
+
     // 회원목록
     @Override
     public List<MemberVO> memberList() throws Exception {
@@ -53,5 +65,6 @@ public class MemberDAOImpl implements MemberDAO{
         if(count == 1) result= true;
         return result;
     }
+
 
 }
