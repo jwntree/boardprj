@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,15 +49,28 @@ public class BoardController {
     //게시글 조회
     
 	@RequestMapping(value="view.do", method=RequestMethod.GET)
-	public String view(@Valid int bno, Model model) throws Exception{
+	public String view(@RequestParam(defaultValue = "-1") int bno, Model model) throws Exception{
+		if(bno < 1) {
+	        return "redirect:list.do";
+		}
 		boardService.increaseViewcnt(bno);
 		BoardVO vo =  boardService.read(bno);
 		model.addAttribute("dto", vo);
-        return "board/write";
+        return "board/view";
 	}
 	
     
     //게시글 수정
+    
+    @RequestMapping(value="updateView.do")
+    public String updateView(@RequestParam(defaultValue = "-1") int bno, Model model) throws Exception{
+		if(bno < 1) {
+	        return "redirect:list.do";
+		}
+    	BoardVO vo =  boardService.read(bno);
+		model.addAttribute("dto", vo);
+        return "board/update";
+    }
     
     @RequestMapping(value="update.do", method=RequestMethod.POST)
     public String update(@ModelAttribute BoardVO vo) throws Exception{

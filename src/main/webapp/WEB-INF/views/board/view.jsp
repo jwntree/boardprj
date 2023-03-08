@@ -3,13 +3,51 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>게시글 목록</title>
+<title>게시글</title>
 <%@ include file="../include/header.jsp" %>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#btnUpdete").click(function(){
+		location.href = "/board/updateView.do?bno=${dto.bno}";
+
+	})
+	
+	$("#btnCancel").click(function(){
+		location.href = "/board/list.do";
+	})
+	
+})
+function deletePost() {
+  if (confirm('게시글을 삭제할까요?')){
+	  const formHtml = `
+	      <form id="deleteForm" action="/board/delete.do" method="post">
+	          <input type="hidden" id="bno" name="bno" value="${dto.bno}" />
+	      </form>
+	  `;
+	  const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+	  const form = doc.body.firstChild;
+	  document.body.append(form);
+	  document.getElementById('deleteForm').submit();
+	  }
+}
+
+</script>
 </head>
 <body>
-    <h2>회원 목록</h2>
-    <input type="button" value="게시글 등록" onclick="location.href='${path}/board/write.do'">
-    <table border="1" data-width="700px">
-    </table>
+    <h2>게시글 조회</h2>
+    <div id="title">${dto.title}</div>
+    <div>
+    <span>${dto.writer}</span> |
+    <span><fmt:formatDate value="${dto.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/></span> |
+    <span>${dto.viewcnt}</span>
+    </div>
+    <div id="content">
+    	<div>${dto.content}</div>
+    </div>
+    <button type="button" id="btnUpdete">수정</button>
+    <button type="button" id="btnDelete" onclick="deletePost()">삭제</button>
+    <button type="button" id="btnCancel">목록</button>
+    
+    
 </body>
 </html>
