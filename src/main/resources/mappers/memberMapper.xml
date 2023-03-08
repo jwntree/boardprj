@@ -12,4 +12,51 @@
         FROM tbl_member
         ORDER BY userName
     </select>
+    <insert id="insertMember">
+        INSERT into tbl_member
+        ( userId, 
+          userPw,
+          userName,
+          userEmail
+          )
+        VALUES 
+          (#{userId}, 
+          #{userPw}, 
+          #{userName}, 
+          #{userEmail})
+    </insert>
+    
+    <select id="viewMember" resultType="com.co.spring02.vo.MemberVO">
+        SELECT 
+          userId,
+          userName,
+          userEmail,
+          Regdate,
+          Updatedate
+        FROM tbl_member
+        WHERE userId = #{userId}
+    </select>
+    
+    <update id="updateMember">
+        UPDATE tbl_member
+        SET
+            userPw = #{userPw},
+            userName = #{userName},
+            userEmail = #{userEmail},
+            updatedate = SYSDATE
+        WHERE
+            userId = #{userId}  
+    </update>
+    
+    <delete id="deleteMember">
+    delete from tbl_member
+    where userId = #{userId}
+    </delete>
+    
+    <select id="checkPw" resultType="int">
+    	select COUNT(*) from 
+    	tbl_member
+    	where userId = #{userId} and userPw = #{userPw}
+    </select>
+    
 </mapper>

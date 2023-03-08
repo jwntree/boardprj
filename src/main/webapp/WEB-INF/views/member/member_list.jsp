@@ -7,9 +7,9 @@
 <%@ include file="../include/member_header.jsp" %>
 </head>
 <body>
-<%@ include file="../include/member_menu.jsp" %>
     <h2>회원 목록</h2>
-    <table border="1" width="700px">
+    <input type="button" value="회원등록" onclick="location.href='${path}/member/write.do'">
+    <table border="1" data-width="700px">
         <tr>
             <th>아이디</th>
             <th>이름</th>
@@ -18,7 +18,9 @@
         </tr>
         <c:forEach var="row" items="${list}">
         <tr>
-            <td>${row.userId}</td>
+            <td>
+            <a href="${path}/member/view.do?userId=${row.userId}">
+            ${row.userId}</a></td>
             <td>${row.userName}</td>
             <td>${row.userEmail}</td>
             <td>${row.regDate}</td>

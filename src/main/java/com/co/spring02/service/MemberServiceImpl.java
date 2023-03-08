@@ -1,6 +1,8 @@
 package com.co.spring02.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -15,28 +17,33 @@ public class MemberServiceImpl implements MemberService{
 	private MemberDAO memberDao;
 	
     @Override
-    public List<MemberVO> memberList() {
+    public List<MemberVO> memberList() throws Exception{
         return memberDao.memberList();
     }
  
     @Override
-    public void insertMember(MemberVO vo) {
-        
+    public void insertMember(MemberVO vo) throws Exception{
+    	memberDao.insertMember(vo);
     }
  
     @Override
-    public MemberVO viewMember() {
-        return null;
+    public MemberVO viewMember(String userId) throws Exception{
+        return memberDao.viewMember(userId);
     }
  
     @Override
-    public void deleteMember(String userId) {
-        
+    public void deleteMember(String userId) throws Exception{
+        memberDao.deleteMember(userId);
     }
  
     @Override
-    public void updateMember(MemberVO vo) {
-        
+    public boolean checkPw(String userId, String userPw) throws Exception{
+        return memberDao.checkPw(userId, userPw);
     }
+
+	@Override
+	public void updateMember(MemberVO vo) throws Exception{
+        memberDao.updateMember(vo);		
+	}
 
 }

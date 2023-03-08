@@ -5,7 +5,7 @@
 	<title>main</title>
 </head>
 <body>
-<a href="member/list.do">회원관리</a>
+<%@ include file="include/header.jsp" %>
 <h1>${msg}</h1>
 </body>
 </html>
