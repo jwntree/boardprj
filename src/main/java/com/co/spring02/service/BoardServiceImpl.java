@@ -25,14 +25,14 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void update(BoardVO vo) throws Exception {
-		boardDao.update(vo);
+	public int update(BoardVO vo) throws Exception {
+		return boardDao.update(vo);
 		
 	}
 
 	@Override
-	public void delete(int bno) throws Exception {
-		boardDao.delete(bno);
+	public int delete(BoardVO vo) throws Exception {
+		return boardDao.delete(vo);
 		
 	}
 

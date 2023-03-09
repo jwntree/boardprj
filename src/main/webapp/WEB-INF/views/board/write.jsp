@@ -11,6 +11,8 @@
             var title = $("#title").val();
             var content = $("#content").val();
             var writer = $("#writer").val();
+            var password = $("#password").val();
+
             if(title == ""){
                 alert("제목을 입력하세요");
                 document.boardForm.title.focus();
@@ -23,6 +25,11 @@
             }
             if(writer == ""){
                 alert("이름을 입력하세요");
+                document.boardForm.writer.focus();
+                return;
+            }
+            if(password == ""){
+                alert("비밀버호를 입력하세요");
                 document.boardForm.writer.focus();
                 return;
             }
@@ -48,10 +55,16 @@
     	<label for="content">내용</label>
     	<textarea name="content" id="content" rows="10" cols="80"></textarea>
     </div>
+    <c:if test="${sessionScope.userId == null}">
     <div>
     	<label for="writer">이름</label>
     	<input name="writer" id="writer">
     </div>
+    <div>
+    	<label for="password">비밀번호</label>
+    	<input name="password" id="password">
+    </div>
+    </c:if>   
     <div>
         <button type="button" id="btnSave">확인</button>
     	<button type="button" id="btnCancel">취소</button>

@@ -5,7 +5,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>로그인</title>
 <%@ include file="../include/header.jsp" %>
+<c:if test="${sessionScope.userId != null}">
+    <script>
+	alert("중복 로그인은 불가능합니다.");
+	location.href="/"; 
+	</script>
+</c:if>
 <script type="text/javascript">
+
+
  $(document).ready(function(){
 	
 	 $("#btnLogin").click(function(){
@@ -42,7 +50,8 @@
             </tr>
             <tr>
                     <td colspan="2" align="center">
-                    <button type="button" id="btnLogin">로그인</button>
+                    <button type="button" id="btnLogin">로그인</button>                  
+                     <input type="button" value="회원등록" onclick="location.href='${path}/member/write.do'">
                     <c:if test="${msg == 'failure'}">
                     	<div style="color: red">
                     	아이디 또는 비밀번호가 일치하지 않습니다.
@@ -55,6 +64,7 @@
                     </c:if>
             </tr>
             </table>
+            
     </form>
 </body>
 </html>

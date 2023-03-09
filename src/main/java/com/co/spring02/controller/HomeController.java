@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Handles requests for the application home page.
@@ -19,6 +20,13 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
+	/*
+	@ResponseBody
+	@RequestMapping("/hi")
+	public String join() {
+		return "하이하이";
+	}
+	*/
 	   @RequestMapping("/")
 	    public String main(Model model) throws Exception{
 	        // model : 데이터를 담는 그릇 역할, map구조로 저장된다.

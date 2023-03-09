@@ -3,6 +3,7 @@ package com.co.spring02.controller;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -11,12 +12,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.co.spring02.service.BoardService;
 import com.co.spring02.vo.BoardVO;
+import com.co.spring02.vo.ResponseDto;
 
 @Controller
 @RequestMapping("/board/*")
@@ -50,7 +54,20 @@ public class BoardController {
 	
 	//게시글 작성처리
     @RequestMapping(value="insert.do", method=RequestMethod.POST)
-    public String insert(@ModelAttribute BoardVO vo) throws Exception{
+    public String insert(@ModelAttribute BoardVO vo, HttpSession session) throws Exception{
+        
+    	//TODO: 코드를 서비스로 이동
+    	// 로그인 되었을 경우 session에 저장된 userId를 writer에 저장
+    	if(session.getAttribute("userId") != null) {
+    		String writerid = (String) session.getAttribute("userId");
+    		String writerName = (String) session.getAttribute("userName");
+            vo.setWriterId(writerid);
+            vo.setWriter(writerName);
+            vo.setLoginUser(true);
+    	}else {
+    		
+            vo.setLoginUser(false);
+    	}
         boardService.create(vo);
         return "redirect:list.do";
     }
@@ -81,20 +98,63 @@ public class BoardController {
         return "board/update";
     }
     
+    /*
     @RequestMapping(value="update.do", method=RequestMethod.POST)
-    public String update(@ModelAttribute BoardVO vo) throws Exception{
+    public String update(@ModelAttribute BoardVO vo, HttpSession session) throws Exception{
+    	if(session.getAttribute("userId") != null) {
+    		String writerid = (String) session.getAttribute("userId");
+            vo.setWriterId(writerid);
+    	}
         boardService.update(vo);
         return "redirect:list.do";
     }
+    */
+	@ResponseBody
+	@RequestMapping(value="update.do", method=RequestMethod.POST)
+    public boolean update(@ModelAttribute BoardVO vo, HttpSession session) throws Exception{
+    	if(session.getAttribute("userId") != null) {
+    		String writerid = (String) session.getAttribute("userId");
+            vo.setWriterId(writerid);
+    	}   	
+    	return ( boardService.update(vo) != 0);
+    }
+     
+	
     //게시글 삭제
 	
-    @RequestMapping(value="delete.do", method=RequestMethod.POST)
-    public String delete(@RequestParam int bno) throws Exception{
-        boardService.delete(bno);
-        return "redirect:list.do";
+    @RequestMapping(value="deleteView.do")
+    public String deleteView(@RequestParam(defaultValue = "-1") int bno, Model model) throws Exception{
+		if(bno < 1) {
+	        return "redirect:list.do";
+		}
+		model.addAttribute("bno", bno);
+        return "board/delete";
     }
     
+    /*
+    @RequestMapping(value="delete.do", method=RequestMethod.POST)
+    public String delete(@ModelAttribute BoardVO vo, HttpSession session) throws Exception{
+    	if(session.getAttribute("userId") != null) {
+    		String writerid = (String) session.getAttribute("userId");
+            vo.setWriterId(writerid);
+    	}
+        boardService.delete(vo);
+        return "redirect:list.do";
+    }
+    */
     
+    /*
+	@ResponseBody
+	@RequestMapping(value="delete.do", method=RequestMethod.POST)
+    public boolean delete(@ModelAttribute BoardVO vo, HttpSession session) throws Exception{
+    	if(session.getAttribute("userId") != null) {
+    		String writerid = (String) session.getAttribute("userId");
+            vo.setWriterId(writerid);
+    	}   	
+    	return ( boardService.delete(vo) != 0);
+    }
+    */
+     
     
     
     

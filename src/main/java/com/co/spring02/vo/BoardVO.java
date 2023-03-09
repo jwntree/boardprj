@@ -7,8 +7,11 @@ public class BoardVO {
 	String title;
 	String content;
 	String writer;
+	String writerId;
+	String password;
 	Date regdate;
 	int viewcnt;
+	boolean loginUser;
 	public int getBno() {
 		return bno;
 	}
@@ -33,6 +36,18 @@ public class BoardVO {
 	public void setWriter(String writer) {
 		this.writer = writer;
 	}
+	public String getWriterId() {
+		return writerId;
+	}
+	public void setWriterId(String writerId) {
+		this.writerId = writerId;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public Date getRegdate() {
 		return regdate;
 	}
@@ -45,11 +60,17 @@ public class BoardVO {
 	public void setViewcnt(int viewcnt) {
 		this.viewcnt = viewcnt;
 	}
+	public boolean isLoginUser() {
+		return loginUser;
+	}
+	public void setLoginUser(boolean loginUser) {
+		this.loginUser = loginUser;
+	}
 	@Override
 	public String toString() {
-		return "BoardVO [bno=" + bno + ", title=" + title + ", content=" + content + ", writer=" + writer + ", regdate="
-				+ regdate + ", viewcnt=" + viewcnt + "]";
+		return "BoardVO [bno=" + bno + ", title=" + title + ", content=" + content + ", writer=" + writer
+				+ ", writerId=" + writerId + ", password=" + password + ", regdate=" + regdate + ", viewcnt=" + viewcnt
+				+ ", loginUser=" + loginUser + "]";
 	}
-	
 
 }

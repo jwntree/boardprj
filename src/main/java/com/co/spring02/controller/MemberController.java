@@ -33,36 +33,38 @@ public class MemberController {
 	
 	//로그인 화면
 	@RequestMapping("login.do")
-	public String login(HttpSession session) {
-		if(session.getAttribute("userId") == null) {
-			return "member/login";
-		}else {
-        	return "redirect:/";
-		}
+	public String login(HttpSession session,Model model) {
+		//if(session.getAttribute("userId") == null) {
+		//	return "member/login";
+		//}else {
+        //	return "redirect:/";
+		//}
+		return "member/login";
 	}
 	//로그인 체크
 	@RequestMapping("loginCheck.do")
-	public String loginCheck(@ModelAttribute MemberVO vo, HttpSession session,Model model) {
+	public String loginCheck(@ModelAttribute MemberVO vo, HttpSession session,RedirectAttributes rttr,Model model) {
         boolean result = memberService.loginCheck(vo, session);
         if(result) {
         	model.addAttribute("msg", "success");
         	return "main";
         }else {
-        	model.addAttribute("msg", "failure");
-        	return "member/login";
+        	rttr.addFlashAttribute("msg", "failure");
+			return "redirect:login.do";
         }
 		
 	}
 	
 	//로그아웃 처리
 	@RequestMapping("logout.do")
-	public String logout(HttpSession session,Model model) {
+	public String logout(HttpSession session,RedirectAttributes rttr,Model model) {
         memberService.logout(session);
-		model.addAttribute("msg","logout");
-		return "member/login";
+    	rttr.addFlashAttribute("msg", "logout");
+		return "redirect:login.do";
 	}
 	
 	
+	/*
 	// 01 회원 목록
     // url pattern mapping
     @RequestMapping("/list.do")
@@ -72,6 +74,7 @@ public class MemberController {
         model.addAttribute("list", list);
         return "member/member_list";
     }
+    */
     
     // 02_01 회원 등록 페이지로 이동
     // url pattern mapping
@@ -93,25 +96,46 @@ public class MemberController {
         // /member/list.do : 루트 디렉토리를 기준
         // member/list.do : 현재 디렉토리를 기준
         // member_list.jsp로 리다이렉트
-        return "redirect:/member/list.do";
+        //return "redirect:/member/list.do";
+        return "redirect:/";
     }
     
     @RequestMapping("/view.do")
     public String memberView(String userId, Model model)  throws Exception{
     	if(userId == null || userId.isEmpty()) {
-            return "redirect:/member/list.do";
+            //return "redirect:/member/list.do";
+            return "redirect:/";
     	}
         model.addAttribute("dto", memberService.viewMember(userId));
         logger.info("클릭한 아이디 : "+userId);
     	return "member/member_view";
     }
     
+    @RequestMapping("/updateView.do")
+    public String memberView( Model model,HttpSession session)  throws Exception{
+
+    	String UserId = (String) session.getAttribute("userId");
+    	if(UserId != null) {
+    		model.addAttribute("dto", memberService.viewMember(UserId));
+    	}
+    	return "member/member_view";
+    }
+    
+    
     @RequestMapping(value ="member/update.do",method= RequestMethod.POST)
-    public String memberUpdate(@ModelAttribute MemberVO vo, RedirectAttributes rttr, Model model) throws Exception{
+    public String memberUpdate(@ModelAttribute MemberVO vo, RedirectAttributes rttr,HttpSession session, Model model) throws Exception{
         boolean result = memberService.checkPw(vo.getUserId(), vo.getUserPw());
         if(result) {
         	memberService.updateMember(vo);
-        	return "redirect:/member/list.do";
+        	MemberVO vo2 = memberService.viewMember(vo.getUserId());
+        	
+        	//유저id와 세션의 id가 같으면 유저네임 업데이트
+        	if(session.getAttribute("userId").equals(vo.getUserId())) {
+        		session.setAttribute("userName", vo2.getUserName());
+        	}
+        	//return "redirect:/member/list.do";
+            return "redirect:/";
+
         }else {
             /*
         	MemberVO vo2 = memberService.viewMember(vo.getUserId());
@@ -138,7 +162,8 @@ public class MemberController {
         boolean result = memberService.checkPw(userId, userPw);
         if(result) {
             memberService.deleteMember(userId);
-            return "redirect:/member/list.do";
+            //return "redirect:/member/list.do";
+            return "redirect:/";
         }else {
             //model.addAttribute("message", "비밀번호 불일치");
             //model.addAttribute("dto", memberService.viewMember(userId));

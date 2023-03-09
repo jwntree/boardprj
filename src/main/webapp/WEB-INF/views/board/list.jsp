@@ -18,9 +18,16 @@
         
         </select>
         <input name="keyword" value="${keyword}">
-        <input type="submit" value="조회">
-        <button type="button" id="btnWrite" onclick="location.href='${path}/board/write.do'">글쓰기</button>
+        <input type="submit" value="검색">
+        <%--
+        <!-- 로그인한 사용자만 글쓰기 버튼을 활성화 -->
+    	<c:if test="${sessionScope.userId != null}">
+        	<button type="button" id="btnWrite" onclick="location.href='${path}/board/write.do'">글쓰기</button>
+    	</c:if>
+    	--%>
+    	<button type="button" id="btnWrite" onclick="location.href='${path}/board/write.do'">글쓰기</button>
     </form>
+    
     <!-- 레코드의 갯수를 출력 -->
     ${count}개의 게시물이 있습니다
     <table border="1" data-width="700px">
@@ -37,7 +44,8 @@
             <a href="/board/view.do?bno=${row.bno}">${row.bno}</a>
             </td>
             <td>${row.title}</td>
-            <td>${row.writer}</td>
+            <td>${row.writer}<c:if test="${row.writerId != null}"><%="*"%></c:if>
+            </td>
             <td>
             <fmt:formatDate value="${row.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 			</td>

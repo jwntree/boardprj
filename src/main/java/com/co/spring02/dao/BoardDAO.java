@@ -13,9 +13,9 @@ public interface BoardDAO {
 	//2.게시글 상세조회
 	public BoardVO read(int bno) throws Exception;
 	//3.게시글 수정
-	public void update(BoardVO vo) throws Exception;
+	public int update(BoardVO vo) throws Exception;
 	//4.게시글 삭제
-	public void delete(int bno) throws Exception;
+	public int delete(BoardVO vo) throws Exception;
 	//5.게시글 목록
     public List<BoardVO> list(String searchOption, String keyword,int start, int end) throws Exception;
 	//6. 게시글 조회수 증가

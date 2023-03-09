@@ -28,14 +28,14 @@ public class BoardDAOImpl implements BoardDAO{
 	}
 
 	@Override
-	public void update(BoardVO vo) throws Exception {
-		sqlSession.update("boardMapper.updateArticle",vo);
+	public int update(BoardVO vo) throws Exception {
+		return sqlSession.update("boardMapper.updateArticle",vo);
 		
 	}
 
 	@Override
-	public void delete(int bno) throws Exception {
-		sqlSession.delete("boardMapper.deleteArticle",bno);
+	public int delete(BoardVO vo) throws Exception {
+		return sqlSession.delete("boardMapper.deleteArticle",vo);
 		
 	}
 

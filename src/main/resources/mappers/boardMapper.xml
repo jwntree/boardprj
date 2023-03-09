@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="boardMapper">
 <select id="list" resultType="com.co.spring02.vo.BoardVO">
-	select bno,title,content, writer,regdate,viewcnt 
+	select bno,title,content, writer,regdate,viewcnt,loginUser,writerId 
 	from tbl_board
 	<!-- WHERE절을 include 태그로 삽입 -->
     <include refid="search"></include>
@@ -37,16 +37,16 @@
 
 <insert id="insert">
 	insert into tbl_board
-	(bno,title,content,writer)
+	(bno,title,content,writer,writerId,loginUser,password)
 	VALUES
 	(
-	BOARD_SEQ.NEXTVAL,#{title},#{content},#{writer}
+	BOARD_SEQ.NEXTVAL,#{title},#{content},#{writer},#{writerId},#{loginUser},#{password}
 	)
 
 </insert>
 
 <select id="view" resultType="com.co.spring02.vo.BoardVO">
- 	select bno,title,content, writer,regdate,viewcnt 
+ 	select bno,title,content, writer,regdate,viewcnt,loginUser,writerId
 	from tbl_board
 	where bno=#{bno}
 </select>
@@ -61,14 +61,13 @@
 <update id="updateArticle">
  update tbl_board set
 	title = #{title},
-	content = #{content},
-	writer = #{writer}
-	where bno= #{bno}
+	content = #{content}
+	where bno= #{bno} and ((writerId = #{writerId} and loginUser = 1) or (loginuser = 0 and password =#{password}))
 </update>
 
 <delete id="deleteArticle">
         DELETE FROM tbl_board
-        WHERE bno = #{bno}
+        WHERE bno = #{bno} and ((writerId = #{writerId} and loginUser = 1) or (loginuser = 0 and password =#{password}))
 </delete>
 
 </mapper>
