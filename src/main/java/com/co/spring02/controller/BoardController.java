@@ -35,9 +35,7 @@ public class BoardController {
             @RequestParam(defaultValue="") String keyword,
             @RequestParam(defaultValue="1") int curPage,
             Model model) throws Exception{
-		int start = 0;
-		int end = 0;
-		List<BoardVO> list = boardService.list(searchOption, keyword,start,end);
+		List<BoardVO> list = boardService.list(searchOption, keyword);
 	    int count = boardService.countArticle(searchOption, keyword);
 		model.addAttribute("list", list);
 		model.addAttribute("count", count);
@@ -143,7 +141,6 @@ public class BoardController {
     }
     */
     
-    /*
 	@ResponseBody
 	@RequestMapping(value="delete.do", method=RequestMethod.POST)
     public boolean delete(@ModelAttribute BoardVO vo, HttpSession session) throws Exception{
@@ -153,7 +150,6 @@ public class BoardController {
     	}   	
     	return ( boardService.delete(vo) != 0);
     }
-    */
      
     
     

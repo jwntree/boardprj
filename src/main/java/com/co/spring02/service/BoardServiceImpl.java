@@ -43,8 +43,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardVO> list(String searchOption, String keyword,int start, int end) throws Exception {
-		return boardDao.list(searchOption,keyword,start, end);
+	public List<BoardVO> list(String searchOption, String keyword) throws Exception {
+		return boardDao.list(searchOption,keyword);
 	}
 
 	@Override

@@ -53,6 +53,7 @@ public class BoardApiController {
 
 	}
 	*/
+	/*
 	@RequestMapping(value="delete.do", method=RequestMethod.POST)
     public boolean delete(@ModelAttribute BoardVO vo, HttpSession session) throws Exception{
     	if(session.getAttribute("userId") != null) {
@@ -61,4 +62,5 @@ public class BoardApiController {
     	}   	
     	return ( boardService.delete(vo) != 0);
     }
+    */
 }
