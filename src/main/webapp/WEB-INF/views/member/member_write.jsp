@@ -8,15 +8,36 @@
 <%@ include file="../include/header.jsp" %>
 <script>
     $(document).ready(function(){
-        $("#btnUpdate").click(function(){
-            document.form1.action = "${path}/member/update.do";
-            document.form1.submit();
-        });
-        
-        $("#btnDelete").click(function(){
-            document.form1.action = "${path}/member/delete.do";
-            document.form1.submit();
-        });
+		$("#btnSignup").click(function(){
+            var userId = $("#userId").val();
+            var password = $("#password").val();
+            var userName = $("#userName").val();
+            var userEmail = $("#userEmail").val();
+
+            if(userId == ""){
+                alert("아이디를 입력하세요");
+                document.boardForm.title.focus();
+                return;
+            }
+            if(password == ""){
+                alert("비밀번호를 입입력하세요");
+                document.boardForm.content.focus();
+                return;
+            }
+            if(userName == ""){
+                alert("이름을 입력하세요");
+                document.boardForm.writer.focus();
+                return;
+            }
+            if(userEmail == ""){
+                alert("이메일을 입력하세요");
+                document.boardForm.writer.focus();
+                return;
+            }
+            // 폼에 입력한 데이터를 서버로 전송
+            document.boardForm.submit();
+		})
+		
     });
 </script>
 </head>

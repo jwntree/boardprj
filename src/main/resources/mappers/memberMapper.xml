@@ -14,13 +14,15 @@
     </select>
     <insert id="insertMember">
         INSERT into tbl_member
-        ( userId, 
+        (userIdx, 
+          userId, 
           userPw,
           userName,
           userEmail
           )
         VALUES 
-          (#{userId}, 
+          (MEMBER_SEQ.NEXTVAL,
+          #{userId}, 
           #{userPw}, 
           #{userName}, 
           #{userEmail})

@@ -8,13 +8,13 @@
 <%-- 
 <%@ include file="../include/sessionCheck.jsp" %>
 --%>
-<script type="text/javascript">
 <c:if test="${sessionScope.userId != null && dto.writerId !=null}">
-//다른 유저의 게시글 수정에 접근 금지
+<script type="text/javascript">
     alert("잘못된 접근입니다.");
     location.href="/board/list.do"; 
+</script>
 </c:if>
-
+<script type="text/javascript">
 	$(document).ready(function(){
 		$("#btnSave").click(function(){
             var title = $("#title").val();

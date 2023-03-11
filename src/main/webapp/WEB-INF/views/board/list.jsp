@@ -5,20 +5,31 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>게시글 목록</title>
 <%@ include file="../include/header.jsp" %>
+<script type="text/javascript">
+	$(document).ready(function(){	
+		$("#btnSearch").click(function(e){
+			e.preventDefault();
+			location.href = "/board/list.do"+ "?searchOption=" + $('#searchOption').val()+ "&keyword="+ $('#keyword').val();
+		})
+		
+		
+	})
+
+</script>
 </head>
 <body>
     <h2>게시글 목록</h2>
     
-    <form name="form1" method="post" action="${path}/board/list.do">
-        <select name="searchOption">
+    	<form id="SearchForm">
+        <select name="searchOption" id="searchOption">
         <option value="all" <c:out value="${searchOption == 'all'?'selected':''}"/>>제목+작성자+내용</option>
-        <option value="writer"<c:out value="${searchOption == 'all'?'selected':''}"/>>제목</option>
-        <option value="content"<c:out value="${searchOption == 'all'?'selected':''}"/>>작성자</option>
-        <option value="title"<c:out value="${searchOption == 'all'?'selected':''}"/>>내용</option>
+        <option value="writer"<c:out value="${searchOption == 'writer'?'selected':''}"/>>제목</option>
+        <option value="content"<c:out value="${searchOption == 'content'?'selected':''}"/>>작성자</option>
+        <option value="title"<c:out value="${searchOption == 'title'?'selected':''}"/>>내용</option>
         
         </select>
-        <input name="keyword" value="${keyword}">
-        <input type="submit" value="검색">
+        <input name="keyword" id="keyword" value="${keyword}">
+    	<button type="button" type="submit" id="btnSearch">검색</button>
         <%--
         <!-- 로그인한 사용자만 글쓰기 버튼을 활성화 -->
     	<c:if test="${sessionScope.userId != null}">
@@ -26,8 +37,7 @@
     	</c:if>
     	--%>
     	<button type="button" id="btnWrite" onclick="location.href='${path}/board/write.do'">글쓰기</button>
-    </form>
-    
+    	</form>
     <!-- 레코드의 갯수를 출력 -->
     ${count}개의 게시물이 있습니다
     <table border="1" data-width="700px">

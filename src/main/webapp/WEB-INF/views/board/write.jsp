@@ -29,7 +29,7 @@
                 return;
             }
             if(password == ""){
-                alert("비밀버호를 입력하세요");
+                alert("비밀번호를 입력하세요");
                 document.boardForm.writer.focus();
                 return;
             }

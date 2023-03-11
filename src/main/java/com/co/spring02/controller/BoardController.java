@@ -31,7 +31,7 @@ public class BoardController {
 	
 	//게시글 리스트
 	@RequestMapping(value="list.do")
-	public String list(@RequestParam(defaultValue="title") String searchOption,
+	public String list(@RequestParam(defaultValue="all") String searchOption,
             @RequestParam(defaultValue="") String keyword,
             @RequestParam(defaultValue="1") int curPage,
             Model model) throws Exception{

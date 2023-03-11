@@ -21,9 +21,9 @@ import com.co.spring02.vo.ResponseDto;
 
 @RestController
 @RequestMapping("/board/*")
-public class BoardApiController {
+public class TestApiController {
 
-	private static final Logger logger = LoggerFactory.getLogger(BoardApiController.class);
+	private static final Logger logger = LoggerFactory.getLogger(TestApiController.class);
 
 	@Inject 
 	BoardService boardService;
