@@ -50,12 +50,9 @@
         </tr>
         <c:forEach var="row" items="${list}">
         <tr>
-            <td>
-            <a href="/board/view.do?bno=${row.bno}">${row.bno}</a>
-            </td>
-            <td>${row.title}</td>
-            <td>${row.writer}<c:if test="${row.writerId != null}"><%="*"%></c:if>
-            </td>
+            <td>${row.bno}</td>
+            <td><a href="/board/view.do?bno=${row.bno}">${row.title}</a></td>
+            <td>${row.writer}<c:if test="${row.writerId != null}"><a href="/member/info.do?userId=${row.writerId}">*</a></c:if></td>
             <td>
             <fmt:formatDate value="${row.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 			</td>

@@ -100,6 +100,19 @@ public class MemberController {
         return "redirect:/board/list.do";
     }
     
+    @RequestMapping("/info.do")
+    public String memberInfo(String userId, Model model)  throws Exception{
+    	if(userId == null || userId.isEmpty()) {
+            //return "redirect:/member/list.do";
+            return "redirect:/";
+    	}
+        model.addAttribute("dto", memberService.viewMember(userId));
+        logger.info("클릭한 아이디 : "+userId);
+    	return "member/member_info";
+    }
+    
+    /*
+    //TODO: block to acess it
     @RequestMapping("/view.do")
     public String memberView(String userId, Model model)  throws Exception{
     	if(userId == null || userId.isEmpty()) {
@@ -110,6 +123,7 @@ public class MemberController {
         logger.info("클릭한 아이디 : "+userId);
     	return "member/member_view";
     }
+    */
     
     @RequestMapping("/updateView.do")
     public String memberView( Model model,HttpSession session)  throws Exception{

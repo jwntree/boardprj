@@ -49,7 +49,7 @@ function deletePost() {
     <h2>게시글 조회</h2>
     <div id="title">${dto.title}</div>
     <div>
-    <span>${dto.writer}<c:if test="${dto.writerId != null}"><%="*"%></c:if></span>|
+    <span>${dto.writer}<c:if test="${dto.writerId != null}"><a href="/member/info.do?userId=${dto.writerId}">*</a></c:if></span>|
     <span><fmt:formatDate value="${dto.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/></span> |
     <span>${dto.viewcnt}</span>
     </div>
