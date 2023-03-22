@@ -53,6 +53,9 @@ public class BoardController {
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("pageMaker", pageMaker);
+		model.addAttribute("curPage", curPage);
+		model.addAttribute("perPage", perPage);
+
 		return "board/list";
 	}
 	
