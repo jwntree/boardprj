@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.co.spring02.service.BoardService;
 import com.co.spring02.vo.BoardVO;
+import com.co.spring02.vo.Criteria;
+import com.co.spring02.vo.PageMaker;
 import com.co.spring02.vo.ResponseDto;
 
 @Controller
@@ -34,14 +36,24 @@ public class BoardController {
 	public String list(@RequestParam(defaultValue="all") String searchOption,
             @RequestParam(defaultValue="") String keyword,
             @RequestParam(defaultValue="1") int curPage,
+            @RequestParam(defaultValue="10") int perPage,
             Model model) throws Exception{
-		List<BoardVO> list = boardService.list(searchOption, keyword);
+		Criteria cri = new Criteria();
+		cri.setPage(curPage);
+		cri.setPerPageNum(perPage);
+		List<BoardVO> list = boardService.list(searchOption, keyword,cri);
 	    int count = boardService.countArticle(searchOption, keyword);
+		
+	    PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(count);
+		
 		model.addAttribute("list", list);
 		model.addAttribute("count", count);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
-        return "board/list";
+		model.addAttribute("pageMaker", pageMaker);
+		return "board/list";
 	}
 	
 	//게시글 작성화면
@@ -74,13 +86,20 @@ public class BoardController {
     
 	@RequestMapping(value="view.do", method=RequestMethod.GET)
 	public String view(@RequestParam(defaultValue = "-1") int bno, Model model) throws Exception{
+		//TODO: Redirection to Error Page
 		if(bno < 1) {
 	        return "redirect:list.do";
 		}
-		boardService.increaseViewcnt(bno);
 		BoardVO vo =  boardService.read(bno);
-		model.addAttribute("dto", vo);
-        return "board/view";
+		if(vo == null) {
+			logger.debug("게시글이 없습니다.");
+	        return "redirect:list.do";
+		}else {
+			boardService.increaseViewcnt(bno);
+			logger.debug("게시글이 존재합니다.");
+			model.addAttribute("dto", vo);
+	        return "board/view";
+		}
 	}
 	
     

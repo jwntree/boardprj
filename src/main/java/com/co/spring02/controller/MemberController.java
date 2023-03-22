@@ -97,7 +97,7 @@ public class MemberController {
         // member/list.do : 현재 디렉토리를 기준
         // member_list.jsp로 리다이렉트
         //return "redirect:/member/list.do";
-        return "redirect:/board/list.do";
+        return "redirect:/board/login.do";
     }
     
     @RequestMapping("/info.do")

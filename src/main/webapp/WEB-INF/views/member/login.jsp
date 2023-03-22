@@ -39,31 +39,30 @@
 <body>
     <h2>로그인</h2>
     <form name="loginForm" method="post">
-            <table border="1" data-width="400px">
-            <tr>
-                <td><label for="userId">아이디</label>
-                <input name="userId" id="userId"></td>
-            </tr>
-            <tr>
-                <td><label for="userPw">비밀번호</label>
-                <input name="userPw" id="userPw"></td>
-            </tr>
-            <tr>
-                    <td colspan="2" align="center">
-                    <button type="button" id="btnLogin">로그인</button>                  
-                     <input type="button" value="회원등록" onclick="location.href='${path}/member/write.do'">
-                    <c:if test="${msg == 'failure'}">
-                    	<div style="color: red">
-                    	아이디 또는 비밀번호가 일치하지 않습니다.
-                    	</div>
-                    </c:if>
-                    <c:if test="${msg == 'logout'}">
-                    	<div style="color: red">
-                       	 로그아웃되었습니다.
-                    	</div>
-                    </c:if>
-            </tr>
-            </table>
+            <div data-width="400px">
+            <div>
+                <label for="userId">아이디</label>
+                <input name="userId" id="userId">
+            </div>
+            <div>
+                <label for="userPw">비밀번호</label>
+                <input name="userPw" id="userPw">
+            </div>
+			<div>
+				<input type="checkbox" name="useCookie">
+				<label>로그인유지</label>
+			</div>
+			<div>
+					<button type="button" id="btnLogin">로그인</button> <input
+					type="button" value="회원가입"
+					onclick="location.href='${path}/member/write.do'"> <c:if
+						test="${msg == 'failure'}">
+						<div style="color: red">아이디 또는 비밀번호가 일치하지 않습니다.</div>
+					</c:if> <c:if test="${msg == 'logout'}">
+						<div style="color: red">로그아웃되었습니다.</div>
+					</c:if>
+			</div>
+		</div>
             
     </form>
 </body>

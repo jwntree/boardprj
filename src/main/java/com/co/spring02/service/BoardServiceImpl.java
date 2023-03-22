@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.co.spring02.dao.BoardDAO;
 import com.co.spring02.vo.BoardVO;
+import com.co.spring02.vo.Criteria;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -43,8 +44,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardVO> list(String searchOption, String keyword) throws Exception {
-		return boardDao.list(searchOption,keyword);
+	public List<BoardVO> list(String searchOption, String keyword,Criteria cri) throws Exception {
+		return boardDao.list(searchOption,keyword,cri);
 	}
 
 	@Override

@@ -5,7 +5,7 @@
     <logger name="jdbc.sqlonly"        level="DEBUG"/>
     <logger name="jdbc.sqltiming"      level="INFO"/>
     <logger name="jdbc.audit"          level="WARN"/>
-    <logger name="jdbc.resultset"      level="ERROR"/>
-    <logger name="jdbc.resultsettable" level="ERROR"/>
+    <logger name="jdbc.resultset"      level="DEBUG"/>
+    <logger name="jdbc.resultsettable" level="DEBUG"/>
     <logger name="jdbc.connection"     level="INFO"/>
 </configuration>

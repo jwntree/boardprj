@@ -10,6 +10,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.co.spring02.vo.BoardVO;
+import com.co.spring02.vo.Criteria;
 
 @Repository
 public class BoardDAOImpl implements BoardDAO{
@@ -40,10 +41,12 @@ public class BoardDAOImpl implements BoardDAO{
 	}
 
 	@Override
-	public List<BoardVO> list(String searchOption, String keyword) throws Exception {
+	public List<BoardVO> list(String searchOption, String keyword,Criteria cri) throws Exception {
 	    Map<String, Object> map = new HashMap<String, Object>();
 	    map.put("searchOption", searchOption);
 	    map.put("keyword", keyword);
+	    map.put("start", cri.getRowStart());
+	    map.put("end", cri.getRowEnd());
 		return sqlSession.selectList("boardMapper.list", map);
 	}
 	

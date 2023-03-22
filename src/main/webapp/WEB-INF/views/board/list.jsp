@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>게시글 목록</title>
-<%@ include file="../include/header.jsp" %>
+<%@ include file="../include/header.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function(){	
 		$("#btnSearch").click(function(e){
@@ -12,10 +12,19 @@
 			location.href = "/board/list.do"+ "?searchOption=" + $('#searchOption').val()+ "&keyword="+ $('#keyword').val();
 		})
 		
-		
-	})
+	});
 
+	function list(page){
+        location.href="${path}/board/list.do?curPage="+page+"perPage=${pageMaker.getCri().getPerPageNum()}"+"&searchOption=${searchOption}"+"&keyword=${keyword}";
+    }
 </script>
+<style type="text/css">
+li {
+	list-style: none;
+	float: left;
+	padding: 6px;
+}
+</style>
 </head>
 <body>
     <h2>게시글 목록</h2>
@@ -60,5 +69,22 @@
         </tr>
         </c:forEach>
     </table>
+	<div class="pagenation" id="pagenation">
+		<ul>
+			<c:if test="${pageMaker.prev}">
+				<li><a
+					href="list.do${pageMaker.makeQuery(pageMaker.startPage - 1)}">이전</a></li>
+			</c:if>
+
+			<c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}"
+				var="idx">
+				<li><a href="list.do${pageMaker.makeQuery(idx)}+"&searchOption=${searchOption}"+"&keyword=${keyword}">${idx}</a></li>
+			</c:forEach>
+
+			<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+				<li><a href="list.do${pageMaker.makeQuery(pageMaker.endPage + 1)}+"&searchOption=${searchOption}"+"&keyword=${keyword}">다음</a></li>
+			</c:if>
+		</ul>
+	</div>
 </body>
 </html>
