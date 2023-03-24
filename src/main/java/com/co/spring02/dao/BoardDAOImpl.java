@@ -65,4 +65,13 @@ public class BoardDAOImpl implements BoardDAO{
 		sqlSession.update("boardMapper.increaseViewCnt",bno);
 		
 	}
+
+	@Override
+	public boolean checkArticle(int bno) throws Exception {
+		int count = sqlSession.selectOne("boardMapper.checkArticle",bno);
+        if(count > 0) { 
+        	return true;
+        }
+		return false;
+	}
 }

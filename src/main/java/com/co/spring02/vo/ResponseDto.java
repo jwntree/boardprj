@@ -1,8 +1,9 @@
 package com.co.spring02.vo;
 
+//ResponseEntity가 있는데 이걸 사용할 이유가 있나?
 public class ResponseDto<T> {
-    int status;
-    T data;
+	private int status;
+	private T data;
 	public int getStatus() {
 		return status;
 	}

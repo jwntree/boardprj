@@ -2,9 +2,12 @@ package com.co.spring02.vo;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class MemberVO {
 	
 	private String userId;
+	@JsonIgnore
 	private String userPw;
 	private String userName;
 	private String userEmail;

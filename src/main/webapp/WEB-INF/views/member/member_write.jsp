@@ -34,6 +34,12 @@
                 document.boardForm.writer.focus();
                 return;
             }
+            let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+            if(!regex.test(userEmail)){
+                alert("올바르지 않은 이메일입니다.");
+                document.boardForm.writer.focus();
+                return; 	
+            }
             // 폼에 입력한 데이터를 서버로 전송
             document.form1.submit();
 		})

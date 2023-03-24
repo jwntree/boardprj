@@ -23,6 +23,8 @@ public interface BoardDAO {
     public void increaseViewcnt(int bno) throws Exception;
     //7. 게시글 카운트
 	public int countArticle(String searchOption, String keyword);
+	//8.게시글 존재 체크
+	public boolean checkArticle(int bno) throws Exception;
 
 
 }

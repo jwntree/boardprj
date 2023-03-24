@@ -32,8 +32,8 @@ public class TestApiController {
 	@RequestMapping(value="delete.do", method=RequestMethod.POST)
     public int delete(@RequestBody BoardVO vo, HttpSession session) throws Exception{
     	if(session.getAttribute("userId") != null) {
-    		String writerid = (String) session.getAttribute("userId");
-            vo.setWriterId(writerid);
+    		String writerId = (String) session.getAttribute("userId");
+            vo.setWriterId(writerId);
     	}   	
     	return boardService.delete(vo);
     }
@@ -57,8 +57,8 @@ public class TestApiController {
 	@RequestMapping(value="delete.do", method=RequestMethod.POST)
     public boolean delete(@ModelAttribute BoardVO vo, HttpSession session) throws Exception{
     	if(session.getAttribute("userId") != null) {
-    		String writerid = (String) session.getAttribute("userId");
-            vo.setWriterId(writerid);
+    		String writerId = (String) session.getAttribute("userId");
+            vo.setWriterId(writerId);
     	}   	
     	return ( boardService.delete(vo) != 0);
     }

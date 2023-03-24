@@ -2,15 +2,20 @@ package com.co.spring02.vo;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class BoardVO {
-	int bno;
-	String title;
-	String content;
-	String writer;
-	String writerId;
-	String password;
-	Date regdate;
-	int viewcnt;
+	private int bno;
+	private String title;
+	private String content;
+	private String writer;
+	private String writerId;
+	@JsonIgnore
+	private String password;
+	private Date regdate;
+	private int viewcnt;
+	private int replycnt; //게시글 댓글의 수
+	
 	boolean loginUser;
 	public int getBno() {
 		return bno;
@@ -59,6 +64,13 @@ public class BoardVO {
 	}
 	public void setViewcnt(int viewcnt) {
 		this.viewcnt = viewcnt;
+	}
+	
+	public int getReplycnt() {
+		return replycnt;
+	}
+	public void setReplycnt(int replycnt) {
+		this.replycnt = replycnt;
 	}
 	public boolean isLoginUser() {
 		return loginUser;

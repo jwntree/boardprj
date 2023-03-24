@@ -38,11 +38,9 @@
 				if($.trim(data) == "false") {
 					alert('게시물 삭제에 실패했습니다. 비밀번호를 확인해주세요');
 				} 
-                if($.trim(data) == "true") {
+				else if($.trim(data) == "true") {
 				   alert('게시물이 삭제 되었습니다.');
 				   location.href = "/board/list.do";
-                }else{
- 				   alert($.trim(data));
                 }
 			},
     		error : function(request,status,error) {

@@ -15,7 +15,10 @@
 	});
 
 	function list(page){
-        location.href="${path}/board/list.do?curPage="+page+"&perPage=${perPage}"+"&searchOption=${searchOption}"+"&keyword=${keyword}";
+		let url = "${path}/board/list.do?curPage="+page+"&perPage=${perPage}"
+		<c:if test="${!searchOption.isEmpty()}">url += "&searchOption=${searchOption}"</c:if>
+		<c:if test="${!keyword.isEmpty()}">url += "&keyword=${keyword}"</c:if>
+        location.href=url;
     }
 </script>
 <style type="text/css">
@@ -60,8 +63,12 @@ li {
         <c:forEach var="row" items="${list}">
         <tr>
             <td>${row.bno}</td>
-            <td><a href="/board/view.do?bno=${row.bno}">${row.title}</a></td>
-            <td>${row.writer}<c:if test="${row.writerId != null}"><a href="/member/info.do?userId=${row.writerId}">*</a></c:if></td>
+				<td><a href="/board/view.do?bno=${row.bno}">${row.title}</a>
+					<c:if test="${row.replycnt > 0}">
+						<a href="/board/view.do?bno=${row.bno}#listReply"><span style="color: red;">(${row.replycnt}) </span></a>
+					</c:if>
+				</td>
+				<td>${row.writer}<c:if test="${row.writerId != null}"><a href="/member/info.do?userId=${row.writerId}">*</a></c:if></td>
             <td>
             <fmt:formatDate value="${row.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 			</td>

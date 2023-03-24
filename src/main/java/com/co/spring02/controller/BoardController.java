@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.co.spring02.service.BoardService;
+import com.co.spring02.service.ReplyService;
 import com.co.spring02.vo.BoardVO;
 import com.co.spring02.vo.Criteria;
 import com.co.spring02.vo.PageMaker;
@@ -30,10 +31,12 @@ public class BoardController {
 	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 	@Inject 
 	BoardService boardService;
+	@Inject
+	ReplyService replyService;
 	
 	//게시글 리스트
 	@RequestMapping(value="list.do")
-	public String list(@RequestParam(defaultValue="all") String searchOption,
+	public String list(@RequestParam(defaultValue="") String searchOption,
             @RequestParam(defaultValue="") String keyword,
             @RequestParam(defaultValue="1") int curPage,
             @RequestParam(defaultValue="10") int perPage,
@@ -72,9 +75,9 @@ public class BoardController {
     	//TODO: 코드를 서비스로 이동
     	// 로그인 되었을 경우 session에 저장된 userId를 writer에 저장
     	if(session.getAttribute("userId") != null) {
-    		String writerid = (String) session.getAttribute("userId");
+    		String writerId = (String) session.getAttribute("userId");
     		String writerName = (String) session.getAttribute("userName");
-            vo.setWriterId(writerid);
+            vo.setWriterId(writerId);
             vo.setWriter(writerName);
             vo.setLoginUser(true);
     	}else {
@@ -95,12 +98,14 @@ public class BoardController {
 		}
 		BoardVO vo =  boardService.read(bno);
 		if(vo == null) {
-			logger.debug("게시글이 없습니다.");
+			//logger.debug("게시글이 없습니다.");
 	        return "redirect:list.do";
 		}else {
+			//logger.debug("게시글이 존재합니다.");
 			boardService.increaseViewcnt(bno);
-			logger.debug("게시글이 존재합니다.");
+			int replyCount = replyService.count(bno);
 			model.addAttribute("dto", vo);
+			model.addAttribute("replyCount", replyCount);
 	        return "board/view";
 		}
 	}
@@ -122,8 +127,8 @@ public class BoardController {
     @RequestMapping(value="update.do", method=RequestMethod.POST)
     public String update(@ModelAttribute BoardVO vo, HttpSession session) throws Exception{
     	if(session.getAttribute("userId") != null) {
-    		String writerid = (String) session.getAttribute("userId");
-            vo.setWriterId(writerid);
+    		String writerId = (String) session.getAttribute("userId");
+            vo.setWriterId(writerId);
     	}
         boardService.update(vo);
         return "redirect:list.do";
@@ -133,8 +138,8 @@ public class BoardController {
 	@RequestMapping(value="update.do", method=RequestMethod.POST)
     public boolean update(@ModelAttribute BoardVO vo, HttpSession session) throws Exception{
     	if(session.getAttribute("userId") != null) {
-    		String writerid = (String) session.getAttribute("userId");
-            vo.setWriterId(writerid);
+    		String writerId = (String) session.getAttribute("userId");
+            vo.setWriterId(writerId);
     	}   	
     	return ( boardService.update(vo) != 0);
     }
@@ -155,8 +160,8 @@ public class BoardController {
     @RequestMapping(value="delete.do", method=RequestMethod.POST)
     public String delete(@ModelAttribute BoardVO vo, HttpSession session) throws Exception{
     	if(session.getAttribute("userId") != null) {
-    		String writerid = (String) session.getAttribute("userId");
-            vo.setWriterId(writerid);
+    		String writerId = (String) session.getAttribute("userId");
+            vo.setWriterId(writerId);
     	}
         boardService.delete(vo);
         return "redirect:list.do";
@@ -167,8 +172,8 @@ public class BoardController {
 	@RequestMapping(value="delete.do", method=RequestMethod.POST)
     public boolean delete(@ModelAttribute BoardVO vo, HttpSession session) throws Exception{
     	if(session.getAttribute("userId") != null) {
-    		String writerid = (String) session.getAttribute("userId");
-            vo.setWriterId(writerid);
+    		String writerId = (String) session.getAttribute("userId");
+            vo.setWriterId(writerId);
     	}   	
     	return ( boardService.delete(vo) != 0);
     }

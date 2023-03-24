@@ -5,7 +5,7 @@
 <mapper namespace="boardMapper">
 <select id="list" resultType="com.co.spring02.vo.BoardVO">
     <include refid="pagingHeader"></include>
-	select rownum, bno,title,content, writer,regdate,viewcnt,loginUser,writerId 
+	select rownum, bno,title,content, writer,regdate,viewcnt,loginUser,writerId, (SELECT COUNT(*) FROM tbl_reply WHERE bno=tbl_board.bno) AS replycnt
 	from tbl_board
 	<!-- WHERE절을 include 태그로 삽입 -->
     <include refid="search"></include>
@@ -23,17 +23,16 @@
 <sql id="search">
 	<choose>
 		<!-- oracle 전용 concat 이용-->
-		<!-- 검색 옵션이 전체 검색일 경우 -->
-      <when test="searchOption == 'all'">
-            where writer like '%'||#{keyword}||'%'
+		<!-- 전체 검색이 아닐 경우  -->
+		<when test="searchOption == 'writer' || searchOption == 'content' ||  searchOption == 'title'">
+		where ${searchOption} like '%'||#{keyword}||'%'
+		</when>
+		<!-- 그외의 경우 -->
+		<otherwise>
+		    where writer like '%'||#{keyword}||'%'
             or content like '%'||#{keyword}||'%'
             or title like '%'||#{keyword}||'%'
-        </when>
-		<!-- 전체 검색이 아닐 경우  -->
-		<otherwise>
-		where ${searchOption} like '%'||#{keyword}||'%'
-		</otherwise>
-		
+    	</otherwise>
 	</choose>
 </sql>
 
@@ -64,12 +63,12 @@
  update tbl_board set
 	title = #{title},
 	content = #{content}
-	where bno= #{bno} and ((writerId = #{writerId} and loginUser = 1) or (loginuser = 0 and password =#{password}))
+	where bno= #{bno} and ((writerId = #{writerId} and loginUser = 1) or (loginUser = 0 and password =#{password}))
 </update>
 
 <delete id="deleteArticle">
         DELETE FROM tbl_board
-        WHERE bno = #{bno} and ((writerId = #{writerId} and loginUser = 1) or (loginuser = 0 and password =#{password}))
+        WHERE bno = #{bno} and ((writerId = #{writerId} and loginUser = 1) or (loginUser = 0 and password =#{password}))
 </delete>
 <!-- 페이징 sql -->
 <sql id="pagingHeader">
@@ -81,5 +80,61 @@
     ) WHERE rn BETWEEN #{start} AND #{end}
 </sql>
 
+<select id="checkArticle" resultType="int">
+    	select COUNT(*) 
+		from tbl_board
+		where bno=#{bno}
+</select>
+
+<select id="selectReply" resultType="com.co.spring02.vo.ReplyVO">
+    <include refid="pagingHeader"></include>
+	select rownum, rno, (case when deleted= 'N' then tb.content else '삭제된 댓글입니다.' end) as content, writer,writerId,loginUser,regdate,updatedate,deleted, (case when writerId= #{writerId} then 1 else 0 end) as mine from tbl_reply tb
+	where bno = #{bno}
+	order by rno desc
+	<include refid="pagingFooter"></include>
+	order by rno asc
+</select>
+
+<select id="viewReply" resultType="com.co.spring02.vo.ReplyVO">
+	select rownum, rno, (case when deleted= 'N' then tb.content else '삭제된 댓글입니다.' end) as content, writer,writerId,loginUser,regdate,updatedate,deleted, (case when writerId= #{writerId} then 1 else 0 end) as mine from tbl_reply tb 
+	where bno = #{rno}
+</select>
+
+<select id="countReply" resultType="int">
+    SELECT COUNT(*) FROM tbl_reply
+    where bno = #{bno}
+</select>
+
+<insert id="insertReply">
+	insert into tbl_reply (rno,bno,content,writer,writerId,loginuser,password) 
+	values (REPLY_SEQ.NEXTVAL,#{bno},#{content},#{writer},#{writerId},#{loginUser},#{password})
+</insert>
+
+<update id="updateReply">
+	update tbl_reply
+	set content = #{content}
+	updatedate = SYSDATE
+    WHERE rno = #{rno} and deleted = 'N' and ((writerId = #{writerId} and loginUser = 1) or (loginUser = 0 and password =#{password}))
+</update>
+
+<!--
+<delete id="deleteReply">
+	DELETE FROM tbl_reply 
+    WHERE rno = #{rno} and ((writerId = #{writerId} and loginUser = 1) or (loginuser = 0 and password =#{password}))
+</delete>
+-->
+
+<update id="deleteReply">
+	update tbl_reply
+	set deleted = 'Y',
+	content = '삭제된 댓글입니다.'
+    WHERE rno = #{rno} and deleted = 'N' and ((writerId = #{writerId} and loginUser = 1) or (loginUser = 0 and password =#{password}))
+</update>
+
+<select id="checkReply" resultType="int">
+    	select COUNT(*) 
+		from tbl_reply
+		where bno=#{rbi}
+</select>
 
 </mapper>
