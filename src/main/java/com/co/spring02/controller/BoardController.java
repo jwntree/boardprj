@@ -39,7 +39,7 @@ public class BoardController {
 	public String list(@RequestParam(defaultValue="") String searchOption,
             @RequestParam(defaultValue="") String keyword,
             @RequestParam(defaultValue="1") int curPage,
-            @RequestParam(defaultValue="10") int perPage,
+            @RequestParam(defaultValue="30") int perPage,
             Model model) throws Exception{
 		Criteria cri = new Criteria();
 		cri.setPage(curPage);
@@ -104,6 +104,8 @@ public class BoardController {
 			//logger.debug("게시글이 존재합니다.");
 			boardService.increaseViewcnt(bno);
 			int replyCount = replyService.count(bno);
+			String newContent = vo.getContent().replaceAll("\n", "<br>"); //TODO: Raw Text를 받아 개행문자를 치환하여 표시하는대신 에디터로 html을 받아 db에 저장
+			vo.setContent(newContent);
 			model.addAttribute("dto", vo);
 			model.addAttribute("replyCount", replyCount);
 	        return "board/view";

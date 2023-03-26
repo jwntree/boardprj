@@ -16,6 +16,7 @@ public class ReplyVO {
 	private Date regDate;
 	private Date updateDate;
 	private boolean mine;
+	private String deleted;
 	
 	public int getRno() {
 		return rno;
@@ -77,12 +78,21 @@ public class ReplyVO {
 	public void setMine(boolean mine) {
 		this.mine = mine;
 	}
+	
+	public String getDeleted() {
+		return deleted;
+	}
+	public void setDeleted(String deleted) {
+		this.deleted = deleted;
+	}
 	@Override
 	public String toString() {
 		return "ReplyVO [rno=" + rno + ", bno=" + bno + ", content=" + content + ", writer=" + writer + ", writerId="
 				+ writerId + ", loginUser=" + loginUser + ", password=" + password + ", regDate=" + regDate
-				+ ", updateDate=" + updateDate + "]";
+				+ ", updateDate=" + updateDate + ", mine=" + mine + ", deleted=" + deleted + "]";
 	}
+
+	
 	
 	
 }

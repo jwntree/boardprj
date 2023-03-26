@@ -54,18 +54,24 @@ function listReply(num){
             let output = ""
             for(var i in replys){
             	output += "<div id=" +"\"comment_" + replys[i].rno +"\">"
-                output += "<span>"+ replys[i].writer +"</span>";
+                output += '<div class="comment"><span>'+ replys[i].writer +"</span>";
                 console.log(replys[i].writerId)
                 if(replys[i].writerId){
                 	output += '<a href="/member/info.do?userId=' + replys[i].writerId+ '">*</a>';
                 }
                 output += "<span>" + "("+DateFormat(replys[i].updateDate)+")</span>";
                 output += "<p id=r_text_" + replys[i].rno +">"+ replys[i].content.replaceAll("\n","<br>")+"</p>";
+                
+                output +='<input type="hidden" id="mine" value="' +replys[i].mine+ '">'
+                output +='<input type="hidden" id="deleted" value="' +replys[i].deleted+ '">'
+                output +='<input type="hidden" id="loginUser" value="' +replys[i].loginUser+ '">'
+                output += "<p id=r_text_" + replys[i].rno +">"+ replys[i].content.replaceAll("\n","<br>")+"</p>";
+
                 if(replys[i].mine == true || replys[i].loginUser == false){
                 	output += '<button type="button" class="btnShowReplyUpdate" onclick="showReplyModify(' +replys[i].rno+')">수정</button>'
                 	output += '<button type="button" class="btnShowReplyDelete" onclick="showReplyDelete(' +replys[i].rno+')">삭제</button>'
                 }
-                output += "</div>"
+                output += "</div></div>"
             }
             $("#listReply").html(output);
             //pages
@@ -139,26 +145,41 @@ function writeReply(){
 // **댓글 수정화면 생성 함수
 function showReplyModify(rno){
 		let r_text = $("#r_text_"+rno).text()
+		let deleted = $("#comment_" + rno +" > .comment > #deleted").val()
+		let loginUser = $("#comment_" +rno +" > .comment > #loginUser").val()
+		let mine = $("#comment_" +rno +" > comment > #mine")
+		if((mine == false && loginUser == true) || deleted == "Y"){
+			alert("수정할 수 없는 댓글입니다.")
+			return
+		}
 		let output = ""
 		output+= '<div class="ReplyModify">'
-		output+='<div>'
-		output+='<label for="password">패스워드</label><input name="password" type="password" id="password">'
-		output+='<textarea id="detailReplytext" rows="5" cols="82">' + r_text +'</textarea>'
-		output+='</div>'
-		output+='<button type="button" class="btnReplyUpdate" onclick="updateReply(' +rno + ')" >수정</button>'
-		output+='<button type="button" class="btnReplyClose" onclick="ReplyClose()" >취소</button></div>'
+	    if(mine == false && loginUser == false){
+			output+='<label for="password">패스워드</label><input name="password" type="password" id="password"><p>'
+	    }
+		output+='<textarea id="detailReplytext" rows="5" cols="82">' + r_text +'</textarea><p>'
+			output+='<button type="button" class="btnReplyUpdate" onclick="updateReply(' +rno + ')" >수정</button>'
+		output+='<button type="button" class="btnReplyClose" onclick="ReplyClose()" >취소</button><p></div>'
 		ReplyClose()
 		$(("#comment_"+rno)+':not(:has(.ReplyModify))').append(output);
 }
 //**댓글 삭제화면 생성 함수
 function showReplyDelete(rno){
+		let deleted = $("#comment_" + rno +" > .comment > #deleted").val()
+		let loginUser = $("#comment_" +rno +" > .comment > #loginUser").val()
+		let mine = $("#comment_" +rno +" > comment > #mine")
+		if((mine == false && loginUser == true) || deleted == "Y"){
+			alert("수정할 수 없는 댓글입니다.")
+			return
+		}
 		let output = ""
 		output+= '<div class="ReplyDelete">'
-		output+='<div>'
-		output+='<label for="password">패스워드</label><input name="password" type="password" id="password">'
-		output+='</div>'
+		output+='댓글을 삭제하시겠습니까?<p>'
+	    if(mine == false && loginUser == false){
+			output+='<label for="password">패스워드</label><input name="password" type="password" id="password"><p>'
+	    }
 		output+='<button type="button" class="btnReplyDelete" onclick="deleteReply(' +rno + ')" >삭제</button>'
-		output+='<button type="button" class="btnReplyClose" onclick="ReplyClose" onclick="ReplyClose()">취소</button></div>'
+		output+='<button type="button" class="btnReplyClose" onclick="ReplyClose" onclick="ReplyClose()">취소</button><p></div>'
 		ReplyClose()
 		$(("#comment_"+rno)+':not(:has(.ReplyModify))').append(output);
 }
@@ -170,7 +191,7 @@ function ReplyClose(){
 
 function deleteReply(rno){
 	var param = { 'rno' : rno };
-	password = $(".ReplyDelete > div > #password").val();
+	password = $(".ReplyDelete > #password").val();
     if(password == ""){
         alert("비밀번호를 입력하세요");
         document.boardForm.writer.focus();
@@ -195,8 +216,8 @@ function deleteReply(rno){
     });
 }
 function updateReply(rno){
-    var replytext=$("#replytext").val();
-	password = $(".ReplyModify > div > #password").val();
+    var replytext=$("#detailReplytext").val();
+	password = $(".ReplyModify > #password").val();
     if(replytext == ""){
         alert("내용을 입력하세요");
         return;

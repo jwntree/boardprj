@@ -23,10 +23,6 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public BoardVO read(int bno) throws Exception {
 		BoardVO vo = boardDao.read(bno);
-		if(vo !=null) {
-			String newContent = vo.getContent().replaceAll("\n", "<br>"); //TODO: Raw Text를 받아 개행문자를 치환하여 표시하는대신 에디터로 html을 받아 db에 저장
-			vo.setContent(newContent);
-		}
 		return vo;
 	}
 
