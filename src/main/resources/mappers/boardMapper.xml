@@ -131,7 +131,7 @@
     WHERE rno = #{rno} and deleted = 'N' and ((writerId = #{writerId} and loginUser = 1) or (loginUser = 0 and password =#{password}))
 </update>
 
-<select id="checkReply" resultType="int">
+<select id="checkReply" resultType="boolean">
     	select COUNT(*) 
 		from tbl_reply
 		where bno=#{rbi}

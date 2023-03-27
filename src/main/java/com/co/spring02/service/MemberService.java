@@ -1,5 +1,6 @@
 package com.co.spring02.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -13,7 +14,7 @@ public interface MemberService {
     // 회원 로그인 정보
     public MemberVO MemberInfo(MemberVO vo);
     // 회원 로그아웃
-    public void logout(HttpSession session);
+    public void logout(HttpSession session) throws Exception;
     
     // 회원 목록 
     public List<MemberVO> memberList() throws Exception;
@@ -27,4 +28,12 @@ public interface MemberService {
     public void updateMember(MemberVO vo) throws Exception;
 	//비밀번호 체크
     public boolean checkPw(String userId, String userPw) throws Exception;
+    
+
+    //자동로그인
+    public void keepLogin(String userId, String token, Date valid) throws Exception;
+    public MemberVO checkUserWithToken(String token) throws Exception;
+    public void keepLoginValidUpdate(String userId, String token, Date valid) throws Exception;
+
+	
 }

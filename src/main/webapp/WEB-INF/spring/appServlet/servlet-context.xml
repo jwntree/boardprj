@@ -37,6 +37,29 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="com.co.spring02.controller" />
+	<context:component-scan base-package="com.co.spring02.interceptor" />
+	
+	
+	<beans:bean id="rememberMeInterceptor" class="com.co.spring02.interceptor.rememberMeInterceptor" />
+	<beans:bean id="LoginAfterInterceptor" class="com.co.spring02.interceptor.LoginAfterInterceptor"/>
+	
+
+
+	<interceptors>
+		<interceptor>
+			<mapping path="/**" />
+			<exclude-mapping path="/member/loginCheck.do"/>
+			<beans:ref bean="rememberMeInterceptor" />
+		</interceptor>
+		<!--
+		<interceptor>
+			<mapping path="/member/login.do" />
+			<mapping path="/member/write.do" />
+			<beans:ref bean="LoginAfterInterceptor" />
+		</interceptor>
+		 -->
+	</interceptors>
+	
 	
 	
 	

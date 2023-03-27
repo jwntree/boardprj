@@ -1,8 +1,11 @@
 package com.co.spring02.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -43,11 +46,24 @@ public class MemberController {
 	}
 	//로그인 체크
 	@RequestMapping("loginCheck.do")
-	public String loginCheck(@ModelAttribute MemberVO vo, HttpSession session,RedirectAttributes rttr,Model model) {
+	public String loginCheck(@ModelAttribute MemberVO vo, boolean autologin, HttpSession session,RedirectAttributes rttr,
+			Model model, HttpServletResponse response) throws Exception {
         boolean result = memberService.loginCheck(vo, session);
         if(result) {
-        	model.addAttribute("msg", "success");
-        	return "main";
+            if ( autologin ){
+                // 오토로그인이 체크되어 있으면 쿠키를 생성하고 현재 세션의 id를 쿠키에 저장한다.
+                Cookie cookie = new Cookie("loginCookie", session.getId());
+				session.setAttribute("loginToken", session.getId());
+                cookie.setPath("/");
+                cookie.setMaxAge(60*60*24*7);
+                response.addCookie(cookie);
+                int amount = 60 * 60 * 24 * 7;  // 7일
+                Date sessionLimit = new Date(System.currentTimeMillis() + (1000 * amount)); // 로그인 유지기간 설정
+                memberService.keepLogin(vo.getUserId(), session.getId(), sessionLimit);
+
+            }
+        	rttr.addFlashAttribute("msg", "success");
+        	return "redirect:/";
         }else {
         	rttr.addFlashAttribute("msg", "failure");
 			return "redirect:login.do";
@@ -57,9 +73,14 @@ public class MemberController {
 	
 	//로그아웃 처리
 	@RequestMapping("logout.do")
-	public String logout(HttpSession session,RedirectAttributes rttr,Model model) {
+	public String logout(HttpSession session,RedirectAttributes rttr,Model model, HttpServletResponse response) throws Exception {
         memberService.logout(session);
-    	rttr.addFlashAttribute("msg", "logout");
+        //쿠키삭제
+        Cookie cookie = new Cookie("loginCookie", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        rttr.addFlashAttribute("msg", "logout");
 		return "redirect:login.do";
 	}
 	

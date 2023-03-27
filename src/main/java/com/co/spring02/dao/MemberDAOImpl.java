@@ -1,5 +1,6 @@
 package com.co.spring02.dao;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,7 @@ public class MemberDAOImpl implements MemberDAO{
 
 	@Override
 	public boolean loginCheck(MemberVO vo) {
-	       String name = sqlSession.selectOne("memberMapper.loginCheck", vo);
-	        return (name == null) ? false : true;
+		return sqlSession.selectOne("memberMapper.loginCheck", vo);
 	}
 
 	@Override
@@ -65,6 +65,31 @@ public class MemberDAOImpl implements MemberDAO{
         if(count == 1) result= true;
         return result;
     }
+
+	@Override
+	public void keepLogin(String userId, String token, Date valid) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userId", userId);
+        map.put("token", token);
+        map.put("valid", valid);
+        sqlSession.update("memberMapper.insertKeepLogin", map);
+		
+	}
+
+	@Override
+	public MemberVO checkUserWithToken(String token) throws Exception {
+		return sqlSession.selectOne("memberMapper.checkUserWithToken", token);
+	}
+
+	@Override
+	public void keepLoginValidUpdate(String userId, String token, Date valid) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("userId", userId);
+        map.put("token", token);
+        map.put("valid", valid);
+        sqlSession.update("memberMapper.keepLoginValidUpdate", map);
+		
+	}
 
 
 }

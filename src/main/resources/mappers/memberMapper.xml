@@ -29,8 +29,8 @@
     </insert>
     
     
-    <select id="loginCheck" resultType="String">
-        SELECT userName AS userName FROM tbl_member
+    <select id="loginCheck" resultType="boolean">
+        SELECT count(*) FROM tbl_member
         WHERE userId = #{userId} AND userpw = #{userPw}
     </select>
     
@@ -78,6 +78,74 @@
     	where userId = #{userId} and userPw = #{userPw}
     </select>
    
-   
+    <insert id="insertKeepLogin">
+    insert into remember_login
+    (userId,token,valid)
+    values(#{userId},#{token},#{valid})
+	</insert>
+	
+	<select id="checkUserWithToken" resultType="com.co.spring02.vo.MemberVO">
+    SELECT userId,
+          userName,
+          userEmail,
+          Regdate,
+          Updatedate
+    from tbl_member
+    where userid = (SELECT
+          userId
+    FROM remember_login
+    WHERE token = #{token} and valid >= SYSDATE)
+	</select>
+
+    <update id="keepLoginValidUpdate">
+    UPDATE remember_login SET
+    valid = #{valid} 
+    where token = #{token} and userId = #{userId}
+	</update>
+	
+	
+    <!--  todo -->
+    <!-- 
+    <select id="checkIdExist" resultType="int">
+    	select COUNT(*) from 
+    	tbl_member
+    	where userId = #{userId}
+    </select>
+    
+    <select id="checkEmailExist" resultType="int">
+    	select COUNT(*) from 
+    	tbl_member
+    	where email = #{email}
+    </select>
+    
+    <select id="UserIdbyInfo" resultType="String">
+    	select userId from 
+    	tbl_member
+    	where userId = #{userId} and userName = #{userName} and Regdate = #{Regdate}
+    </select>
+    <insert id="TryPasswordRecover">
+    	insert into tbl_member_challenge
+    	(id,challenge,valid)
+    	values(#{userId}, #{challenge},  SYSDATE + 1/(24*60) * 10)
+    </insert>
+    
+    <insert id="UpdatePassword">
+    	update tbl_member SET
+    	userPw = #{userPw}
+    	where userId = #{userId} and #{challenge} and valid >= SYSDATE
+    </insert>
+    
+    <select id="CheckPwChallenge">
+    	select COUNT(*) from tbl_member_challenge 
+    	where userId = #{userId} and #{challenge} and valid >= SYSDATE
+    </select>
+       
+    <delete id="DeletePWChallenges">
+    	delete from  tbl_member_challenge 
+    	where userId = #{userId}
+    </insert>
+     -->
+    
+
     
 </mapper>

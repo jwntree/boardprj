@@ -49,7 +49,7 @@
                 <input name="userPw" id="userPw">
             </div>
 			<div>
-				<input type="checkbox" name="useCookie">
+				<input type="checkbox" name="autologin" id="autologin">
 				<label>로그인유지</label>
 			</div>
 			<div>

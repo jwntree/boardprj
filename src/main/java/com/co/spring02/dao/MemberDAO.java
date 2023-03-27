@@ -1,5 +1,6 @@
 package com.co.spring02.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -26,4 +27,11 @@ public interface MemberDAO {
     public void updateMember(MemberVO vo) throws Exception;
 	//비밀번호 체크
     boolean checkPw(String userId, String userPw) throws Exception;
+    
+    //자동로그인
+    public void keepLogin(String userId, String token, Date valid) throws Exception;
+    public MemberVO checkUserWithToken(String token) throws Exception;
+    public void keepLoginValidUpdate(String userId, String token, Date valid) throws Exception;
+
+    
 }
