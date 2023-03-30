@@ -20,19 +20,10 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	/*
-	@ResponseBody
-	@RequestMapping("/hi")
-	public String join() {
-		return "하이하이";
-	}
-	*/
 	   @RequestMapping("/")
 	    public String main(Model model) throws Exception{
-	        // model : 데이터를 담는 그릇 역할, map구조로 저장된다.
-	        // model.addAttribute("변수명", 값);
 	        model.addAttribute("msg", "홈페이지 방문을 환영합니다!");
-	        return "main"; // main.jsp로 포워딩
+	        return "main";
 	    }
 	   
 	    @RequestMapping(value = "home.do", method = RequestMethod.GET)

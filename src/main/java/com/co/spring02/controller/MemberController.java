@@ -37,11 +37,6 @@ public class MemberController {
 	//로그인 화면
 	@RequestMapping("login.do")
 	public String login(HttpSession session,Model model) {
-		//if(session.getAttribute("userId") == null) {
-		//	return "member/login";
-		//}else {
-        //	return "redirect:/";
-		//}
 		return "member/login";
 	}
 	//로그인 체크
@@ -124,27 +119,13 @@ public class MemberController {
     @RequestMapping("/info.do")
     public String memberInfo(String userId, Model model)  throws Exception{
     	if(userId == null || userId.isEmpty()) {
-            //return "redirect:/member/list.do";
             return "redirect:/";
     	}
         model.addAttribute("dto", memberService.viewMember(userId));
         logger.info("클릭한 아이디 : "+userId);
     	return "member/member_info";
     }
-    
-    /*
-    //TODO: block to acess it
-    @RequestMapping("/view.do")
-    public String memberView(String userId, Model model)  throws Exception{
-    	if(userId == null || userId.isEmpty()) {
-            //return "redirect:/member/list.do";
-            return "redirect:/";
-    	}
-        model.addAttribute("dto", memberService.viewMember(userId));
-        logger.info("클릭한 아이디 : "+userId);
-    	return "member/member_view";
-    }
-    */
+
     
     @RequestMapping("/updateView.do")
     public String memberView( Model model,HttpSession session)  throws Exception{
@@ -168,25 +149,9 @@ public class MemberController {
         	if(session.getAttribute("userId").equals(vo.getUserId())) {
         		session.setAttribute("userName", vo2.getUserName());
         	}
-        	//return "redirect:/member/list.do";
             return "redirect:/";
 
-        }else {
-            /*
-        	MemberVO vo2 = memberService.viewMember(vo.getUserId());
-            vo.setRegDate(vo2.getRegDate());
-            vo.setUpdateDate(vo2.getUpdateDate());
-            model.addAttribute("dto", vo);
-            model.addAttribute("message", "비밀번호 불일치");
-            return "member/member_view";
-            */
-        	/*
-        	MemberVO vo2 = memberService.viewMember(vo.getUserId());
-            model.addAttribute("dto", vo2);
-            model.addAttribute("message", "비밀번호 불일치");
-            return "member/member_view";
-            */
-        	
+        }else {      	
 			rttr.addAttribute("userId", vo.getUserId());
 			rttr.addFlashAttribute("message", "비밀번호 불일치");
 			return "redirect:view.do";
@@ -197,12 +162,8 @@ public class MemberController {
         boolean result = memberService.checkPw(userId, userPw);
         if(result) {
             memberService.deleteMember(userId);
-            //return "redirect:/member/list.do";
             return "redirect:/";
         }else {
-            //model.addAttribute("message", "비밀번호 불일치");
-            //model.addAttribute("dto", memberService.viewMember(userId));
-            //return "member/member_view";
 			rttr.addAttribute("userId", userId);
 			rttr.addFlashAttribute("message", "비밀번호 불일치");
             return "redirect:/member/view.do";
