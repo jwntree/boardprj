@@ -11,7 +11,11 @@ public interface MemberDAO {
 	
 	
     // 회원 로그인 체크
-    public boolean loginCheck(MemberVO vo);
+    //public boolean loginCheck(MemberVO vo);
+	
+	//회원 아이디 패스워드 반환
+	public MemberVO login(MemberVO vo);
+	
     // 회원 로그인 정보
     public MemberVO MemberInfo(MemberVO vo);
     
@@ -25,8 +29,9 @@ public interface MemberDAO {
     public void deleteMember(String userId) throws Exception;
     // 회원정보 수정
     public void updateMember(MemberVO vo) throws Exception;
-	//비밀번호 체크
-    boolean checkPw(String userId, String userPw) throws Exception;
+	
+    //비밀번호 체크
+    //boolean checkPw(String userId, String userPw) throws Exception;
     
     //자동로그인
     public void keepLogin(String userId, String token, Date valid) throws Exception;

@@ -19,11 +19,17 @@ public class MemberDAOImpl implements MemberDAO{
 	@Inject
     SqlSession sqlSession;
 
+	//@Override
+	//public boolean loginCheck(MemberVO vo) {
+	//	return sqlSession.selectOne("memberMapper.loginCheck", vo);
+	//}
+	
+	//회원 아이디 패스워드 반환
 	@Override
-	public boolean loginCheck(MemberVO vo) {
-		return sqlSession.selectOne("memberMapper.loginCheck", vo);
+	public MemberVO login(MemberVO vo) {
+		return sqlSession.selectOne("memberMapper.login", vo);
 	}
-
+	
 	@Override
     public MemberVO MemberInfo(MemberVO vo) {
         return sqlSession.selectOne("memberMapper.MemberInfo", vo);
@@ -55,6 +61,8 @@ public class MemberDAOImpl implements MemberDAO{
     public void updateMember(MemberVO vo) throws Exception {
         sqlSession.update("memberMapper.updateMember", vo);
     }
+    
+    /*
     @Override
     public boolean checkPw(String userId, String userPw) {
         boolean result = false;
@@ -64,7 +72,7 @@ public class MemberDAOImpl implements MemberDAO{
         int count = sqlSession.selectOne("memberMapper.checkPw", map);
         if(count == 1) result= true;
         return result;
-    }
+    }*/
 
 	@Override
 	public void keepLogin(String userId, String token, Date valid) throws Exception {

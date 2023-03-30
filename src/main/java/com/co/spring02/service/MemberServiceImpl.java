@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.co.spring02.dao.MemberDAO;
@@ -16,21 +17,31 @@ import com.co.spring02.vo.MemberVO;
 @Service
 public class MemberServiceImpl implements MemberService {
 
+	@Inject
+	BCryptPasswordEncoder pwdEncoder;
+	
 	@Override
 	public boolean loginCheck(MemberVO vo, HttpSession session) {
-		boolean result = memberDao.loginCheck(vo);
-		if (result) { // true일 경우 세션에 등록
-			MemberVO vo2 = MemberInfo(vo);
+		MemberVO loginVo = memberDao.login(vo);
+		boolean checkpw = pwdEncoder.matches(vo.getUserPw(), loginVo.getUserPw());
+		if (checkpw) { // true일 경우 세션에 등록
+			MemberVO vo2 = memberDao.MemberInfo(vo);
 			// 세션 변수 등록
 			session.setAttribute("userId", vo2.getUserId());
 			session.setAttribute("userName", vo2.getUserName());
 		}
-		return result;
+		return checkpw;
 	}
 
 	@Override
 	public MemberVO MemberInfo(MemberVO vo) {
-		return memberDao.MemberInfo(vo);
+		MemberVO loginVo = memberDao.login(vo);
+		boolean checkpw = pwdEncoder.matches(vo.getUserPw(), loginVo.getUserPw());
+		if(checkpw) {
+			return memberDao.MemberInfo(vo);
+		}else {
+			return null;
+		}
 	}
 
 	@Override
@@ -52,6 +63,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public void insertMember(MemberVO vo) throws Exception {
+		String inputpass = vo.getUserPw();
+		String pwd = pwdEncoder.encode(inputpass);
+		vo.setUserPw(pwd);
 		memberDao.insertMember(vo);
 	}
 
@@ -65,9 +79,14 @@ public class MemberServiceImpl implements MemberService {
 		memberDao.deleteMember(userId);
 	}
 
-	@Override
+	//@Override
 	public boolean checkPw(String userId, String userPw) throws Exception {
-		return memberDao.checkPw(userId, userPw);
+		MemberVO vo = new MemberVO();
+		vo.setUserId(userId);
+		vo.setUserPw(userPw);
+		MemberVO loginVo = memberDao.login(vo);
+		boolean checkpw = pwdEncoder.matches(vo.getUserPw(), loginVo.getUserPw());
+		return checkpw;
 	}
 
 	@Override

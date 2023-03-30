@@ -12,6 +12,7 @@
         FROM tbl_member
         ORDER BY userName
     </select>
+    
     <insert id="insertMember">
         INSERT into tbl_member
         (userIdx, 
@@ -28,12 +29,18 @@
           #{userEmail})
     </insert>
     
-    
+    <!-- 
     <select id="loginCheck" resultType="boolean">
         SELECT count(*) FROM tbl_member
         WHERE userId = #{userId} AND userpw = #{userPw}
     </select>
-    
+     -->
+     
+     <select id="login" resultType="com.co.spring02.vo.MemberVO">
+        SELECT userId, userPw FROM tbl_member
+        WHERE userId = #{userId}
+    </select>
+     
     <select id="viewMember" resultType="com.co.spring02.vo.MemberVO">
         SELECT 
           userId,
@@ -53,7 +60,7 @@
           Regdate,
           Updatedate
         FROM tbl_member
-        WHERE userId = #{userId} AND userPw = #{userPw}
+        WHERE userId = #{userId}
     </select>
     
     <update id="updateMember">
@@ -72,11 +79,13 @@
     where userId = #{userId}
     </delete>
     
+    <!--  
     <select id="checkPw" resultType="int">
     	select COUNT(*) from 
     	tbl_member
     	where userId = #{userId} and userPw = #{userPw}
     </select>
+   -->
    
     <insert id="insertKeepLogin">
     insert into remember_login
