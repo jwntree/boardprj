@@ -31,7 +31,27 @@ $(document).ready(function(){
 	
     $("#btnReply").click(function(){
     	writeReply();
-    });    
+    });
+	
+	//이미지 새창으로 띄위기
+	//임시처리(현재 창 크기 조절에 문제가 살짝 있음) 나중에 손볼 예정 (별도의 페이지 사용필요?)
+	$('img').click(function(){
+        var width=this.width;
+        var height=this.height;
+        newWindow = null;
+        splits = this.src.split("/")
+        filename = splits[splits.length - 1]
+        if(width < 800 && height < 800){
+			newWindow = window.open(this.src,"","width="+width +" height="+height);  
+			//newWindow = window.open("viewImage.do?name="+filename,"","width="+width +" height="+height);  
+
+        }else{
+			newWindow = window.open(this.src,"","width="+800 +" height="+800);  
+			//newWindow = window.open("viewImage.do?name="+filename,"","width="+800 +" height="+800);  
+
+        }
+	});
+	
 })
 
 function deletePost() {

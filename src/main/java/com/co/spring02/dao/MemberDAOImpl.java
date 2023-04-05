@@ -1,5 +1,6 @@
 package com.co.spring02.dao;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,8 +43,14 @@ public class MemberDAOImpl implements MemberDAO{
     }
  
     @Override
-    public void insertMember(MemberVO vo) throws Exception {
-    	sqlSession.insert("memberMapper.insertMember",vo);
+    public boolean insertMember(MemberVO vo) throws Exception {
+    	try {
+    		sqlSession.insert("memberMapper.insertMember",vo);
+    		return true;
+    	}catch(Exception e){
+    		return false;
+    	}
+
     }
  
     @Override
@@ -74,6 +81,18 @@ public class MemberDAOImpl implements MemberDAO{
         return result;
     }*/
 
+    
+	@Override
+	public int checkIdExist(String id) throws Exception {
+        return sqlSession.selectOne("memberMapper.checkIdExist", id);
+	}
+
+	@Override
+	public int checkEmailExist(String Email) throws Exception {
+        return sqlSession.selectOne("memberMapper.checkEmailExist", Email);
+	}
+
+    
 	@Override
 	public void keepLogin(String userId, String token, Date valid) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -98,6 +117,7 @@ public class MemberDAOImpl implements MemberDAO{
         sqlSession.update("memberMapper.keepLoginValidUpdate", map);
 		
 	}
+
 
 
 }

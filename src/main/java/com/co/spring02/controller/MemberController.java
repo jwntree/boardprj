@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.co.spring02.service.MemberService;
@@ -107,13 +108,31 @@ public class MemberController {
     //public String memberInsert(String userId, String userPw, String userName, String userEmail){
     public String memberInsert(@ModelAttribute MemberVO vo) throws Exception{
         // 테이블에 레코드 입력
-        memberService.insertMember(vo);
+        boolean result = memberService.insertMember(vo);
         // * (/)의 유무에 차이
         // /member/list.do : 루트 디렉토리를 기준
         // member/list.do : 현재 디렉토리를 기준
         // member_list.jsp로 리다이렉트
         //return "redirect:/member/list.do";
-        return "redirect:/member/login.do";
+        //return "redirect:/member/login.do";
+        if(result)
+        	return "redirect:/member/login.do";
+        else
+        	return "redirect:/member/SignupFail.do";
+    }
+    
+ // 아이디 중복 체크
+
+    @ResponseBody
+    @RequestMapping(value="/idChk", method = RequestMethod.POST)
+    public int idChk(String UserId) throws Exception {
+    	int result = memberService.checkIdExist(UserId);
+    	return result;
+    }
+    
+    @RequestMapping("member/SignupFail.do")
+    public String SignupFail(Model model){
+        return "member/SignupFail";
     }
     
     @RequestMapping("/info.do")

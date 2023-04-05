@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.co.spring02.dao.MemberDAO;
 import com.co.spring02.vo.MemberVO;
@@ -74,13 +75,19 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void insertMember(MemberVO vo) throws Exception {
+	public boolean insertMember(MemberVO vo) throws Exception {
+		MemberVO mvo = memberDao.viewMember(vo.getUserId());
+		if(mvo != null){
+			return false;
+		}
 		String inputpass = vo.getUserPw();
 		String pwd = pwdEncoder.encode(inputpass);
 		vo.setUserPw(pwd);
-		memberDao.insertMember(vo);
+		return memberDao.insertMember(vo);
 	}
 
+	
+	
 	@Override
 	public MemberVO viewMember(String userId) throws Exception {
 		return memberDao.viewMember(userId);
@@ -125,6 +132,16 @@ public class MemberServiceImpl implements MemberService {
 	public void keepLoginValidUpdate(String userId, String token, Date valid) throws Exception {
 		memberDao.keepLoginValidUpdate(userId, token, valid);
 
+	}
+
+	@Override
+	public int checkIdExist(String id) throws Exception {
+		return memberDao.checkIdExist(id);
+	}
+
+	@Override
+	public int checkEmailExist(String Email) throws Exception {
+		return memberDao.checkEmailExist(Email);
 	}
 
 }

@@ -181,6 +181,17 @@ public class BoardController {
     }
      
     
+	@RequestMapping(value="viewImage.do", method=RequestMethod.GET)
+	public String viewImage(@RequestParam(defaultValue = "none.jpg") String name, Model model) throws Exception{
+		String filedir = "C:\\resource\\imgs\\";
+		java.io.File file = new java.io.File(filedir+ name);
+		//파일이 존재하면 modle에 넣어줌
+		if(file.exists()) {
+			model.addAttribute("imageName", name);
+		}
+		return "board/viewImage";
+		
+	}
     
     
     
