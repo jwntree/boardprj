@@ -17,12 +17,20 @@ import com.co.spring02.vo.MemberVO;
 @Service
 public class MemberServiceImpl implements MemberService {
 
-	@Inject
-	BCryptPasswordEncoder pwdEncoder;
+	//@Inject
+	//BCryptPasswordEncoder pwdEncoder;
+	
+	//임시처리
+	//Controller에서는 주입에  문제가 없으나 알수 없는 이유로 Service에서는 의존성 주입이 안됨
+	BCryptPasswordEncoder pwdEncoder = new BCryptPasswordEncoder();
 	
 	@Override
 	public boolean loginCheck(MemberVO vo, HttpSession session) {
 		MemberVO loginVo = memberDao.login(vo);
+		//아이디가 없는 경우
+		if(loginVo == null) {
+			return false;
+		}
 		boolean checkpw = pwdEncoder.matches(vo.getUserPw(), loginVo.getUserPw());
 		if (checkpw) { // true일 경우 세션에 등록
 			MemberVO vo2 = memberDao.MemberInfo(vo);
@@ -36,6 +44,10 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MemberVO MemberInfo(MemberVO vo) {
 		MemberVO loginVo = memberDao.login(vo);
+		//아이디가 없는 경우
+		if(loginVo == null) {
+			return null;
+		}
 		boolean checkpw = pwdEncoder.matches(vo.getUserPw(), loginVo.getUserPw());
 		if(checkpw) {
 			return memberDao.MemberInfo(vo);
@@ -85,6 +97,10 @@ public class MemberServiceImpl implements MemberService {
 		vo.setUserId(userId);
 		vo.setUserPw(userPw);
 		MemberVO loginVo = memberDao.login(vo);
+		//아이디가 없는 경우
+		if(loginVo == null) {
+			return false;
+		}
 		boolean checkpw = pwdEncoder.matches(vo.getUserPw(), loginVo.getUserPw());
 		return checkpw;
 	}
