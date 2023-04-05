@@ -43,6 +43,19 @@
 		$("#btnCancel").click(function(){
 			location.href = "/board/list.do";
 		})
+		
+		$('.summernote').summernote({
+			height: 500,
+			lang: "ko-KR",
+				callbacks : {
+					onImageUpload : function(files, editor, welEditable) {     
+						for (var i = 0; i < files.length; i++) {
+							sendFile(files[i], this);
+						}
+					}
+				}			
+			});
+		
 	    function f_submit(){
 	        var formData = $("#boardForm").serialize();
 	        $.ajax({
@@ -68,6 +81,33 @@
 	    }
 		
 	})
+	
+	function sendFile(file, editor) {
+		var form_data = new FormData();
+		form_data.append('file', file);
+		$.ajax({
+			data : form_data,
+			type : "POST",
+			url : '/board/uploadImage',
+			cache : false,
+			contentType : false,
+			enctype : 'multipart/form-data',
+			processData : false,
+			success : function(data) {
+
+				if (data.responseCode != "success") {
+					alert("오류가 발생했습니다.")
+					return;
+				}
+				$(editor).summernote('insertImage', data.url, function($image) {
+					$image.css('height', "auto");
+					$image.css('width', "auto");
+					$image.css('max-width', "500px");
+				});
+				
+			}
+		});
+	}
 </script>
 
 </head>
@@ -83,7 +123,7 @@
     </div>
     <div>
     	<label for="content">내용</label>
-    	<textarea name="content" id="content" rows="10" cols="80"><c:out value="${dto.content}" /></textarea>
+    	<textarea class="summernote" name="content" id="content" rows="10" cols="80"><c:out value="${dto.content}" /></textarea>
     </div>
 
     <c:if test="${sessionScope.userId == null}">

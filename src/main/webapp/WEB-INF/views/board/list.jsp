@@ -9,7 +9,13 @@
 	$(document).ready(function(){	
 		$("#btnSearch").click(function(e){
 			e.preventDefault();
-			location.href = "/board/list.do"+ "?searchOption=" + $('#searchOption').val()+ "&keyword="+ $('#keyword').val();
+			//location.href = "/board/list.do"+ "?searchOption=" + $('#searchOption').val()+ "&keyword="+ $('#keyword').val();
+			if($('#keyword').val()){
+				location.href = "/board/list.do"+ "?searchOption=" + $('#searchOption').val()+ "&keyword="+ $('#keyword').val();
+			}
+			else{
+				location.href = "/board/list.do";
+			}
 		})
 		
 	});

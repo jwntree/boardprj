@@ -46,7 +46,7 @@
             </div>
             <div>
                 <label for="userPw">비밀번호</label>
-                <input name="userPw" id="userPw">
+                <input name="userPw" id="userPw" type="password">
             </div>
 			<div>
 				<input type="checkbox" name="autologin" id="autologin">

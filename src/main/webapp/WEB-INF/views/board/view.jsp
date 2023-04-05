@@ -65,7 +65,6 @@ function listReply(num){
                 output +='<input type="hidden" id="mine" value="' +replys[i].mine+ '">'
                 output +='<input type="hidden" id="deleted" value="' +replys[i].deleted+ '">'
                 output +='<input type="hidden" id="loginUser" value="' +replys[i].loginUser+ '">'
-                output += "<p id=r_text_" + replys[i].rno +">"+ replys[i].content.replaceAll("\n","<br>")+"</p>";
 
                 if(replys[i].mine == true || replys[i].loginUser == false){
                 	output += '<button type="button" class="btnShowReplyUpdate" onclick="showReplyModify(' +replys[i].rno+')">수정</button>'

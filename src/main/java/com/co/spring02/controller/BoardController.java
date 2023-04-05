@@ -104,8 +104,8 @@ public class BoardController {
 			//logger.debug("게시글이 존재합니다.");
 			boardService.increaseViewcnt(bno);
 			int replyCount = replyService.count(bno);
-			String newContent = vo.getContent().replaceAll("\n", "<br>"); //TODO: Raw Text를 받아 개행문자를 치환하여 표시하는대신 에디터로 html을 받아 db에 저장
-			vo.setContent(newContent);
+			//String newContent = vo.getContent().replaceAll("\n", "<br>"); //TODO: Raw Text를 받아 개행문자를 치환하여 표시하는대신 에디터로 html을 받아 db에 저장
+			//vo.setContent(newContent);
 			model.addAttribute("dto", vo);
 			model.addAttribute("replyCount", replyCount);
 	        return "board/view";
