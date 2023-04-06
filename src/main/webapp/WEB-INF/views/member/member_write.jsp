@@ -71,6 +71,11 @@
 			}
 		})
 	}
+	
+	function IdChanged(){
+		$("#idChk").attr("value", "N");
+	}
+	
 </script>
 </head>
 <body>
@@ -79,7 +84,7 @@
 		<div data-width="400px">
 			<div>
 				<label for="userId">아이디</label> 
-				<input name="userId" id="userId">
+				<input name="userId" id="userId" onkeyup="IdChanged()">
 				<button class="idChk" type="button" id="idChk" onclick="fn_idChk();" value="N">중복확인</button>
 			</div>
 			<div>

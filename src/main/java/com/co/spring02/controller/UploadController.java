@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadController {
 	@RequestMapping("/board/uploadImage")
 	@ResponseBody
-	public Map<String, Object> uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request )  {
+	public Map<String, Object> uploadImageFile(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request )  {
 		Map<String, Object> map  = new LinkedHashMap<String, Object>();
 		
 		/*
