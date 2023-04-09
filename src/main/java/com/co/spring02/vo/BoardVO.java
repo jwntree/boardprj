@@ -1,6 +1,7 @@
 package com.co.spring02.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,6 +16,8 @@ public class BoardVO {
 	private Date regdate;
 	private int viewcnt;
 	private int replycnt; //게시글 댓글의 수
+	private List<Integer> attachList;
+	
 	
 	boolean loginUser;
 	public int getBno() {
@@ -78,11 +81,18 @@ public class BoardVO {
 	public void setLoginUser(boolean loginUser) {
 		this.loginUser = loginUser;
 	}
+	public List<Integer> getAttachList() {
+		return attachList;
+	}
+	public void setAttachList(List<Integer> attachList) {
+		this.attachList = attachList;
+	}
 	@Override
 	public String toString() {
 		return "BoardVO [bno=" + bno + ", title=" + title + ", content=" + content + ", writer=" + writer
 				+ ", writerId=" + writerId + ", password=" + password + ", regdate=" + regdate + ", viewcnt=" + viewcnt
-				+ ", loginUser=" + loginUser + "]";
+				+ ", replycnt=" + replycnt + ", attachList=" + attachList + ", loginUser=" + loginUser + "]";
 	}
-
+	
+	
 }

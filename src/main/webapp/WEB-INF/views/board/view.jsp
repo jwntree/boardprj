@@ -166,14 +166,14 @@ function showReplyModify(rno){
 		let r_text = $("#r_text_"+rno).text()
 		let deleted = $("#comment_" + rno +" > .comment > #deleted").val()
 		let loginUser = $("#comment_" +rno +" > .comment > #loginUser").val()
-		let mine = $("#comment_" +rno +" > comment > #mine")
-		if((mine == false && loginUser == true) || deleted == "Y"){
+		let mine = $("#comment_" +rno +" > .comment > #mine").val()
+		if((mine == "false" && loginUser == "true") || deleted == "Y"){
 			alert("수정할 수 없는 댓글입니다.")
 			return
 		}
 		let output = ""
 		output+= '<div class="ReplyModify">'
-	    if(mine == false && loginUser == false){
+	    if(mine == "false" || loginUser == "false"){
 			output+='<label for="password">패스워드</label><input name="password" type="password" id="password"><p>'
 	    }
 		output+='<textarea id="detailReplytext" rows="5" cols="82">' + r_text +'</textarea><p>'
@@ -186,15 +186,15 @@ function showReplyModify(rno){
 function showReplyDelete(rno){
 		let deleted = $("#comment_" + rno +" > .comment > #deleted").val()
 		let loginUser = $("#comment_" +rno +" > .comment > #loginUser").val()
-		let mine = $("#comment_" +rno +" > comment > #mine")
-		if((mine == false && loginUser == true) || deleted == "Y"){
+		let mine = $("#comment_" +rno +" > .comment > #mine").val()
+		if((mine == "false" && loginUser == "true") || deleted == "Y"){
 			alert("수정할 수 없는 댓글입니다.")
 			return
 		}
 		let output = ""
 		output+= '<div class="ReplyDelete">'
 		output+='댓글을 삭제하시겠습니까?<p>'
-	    if(mine == false && loginUser == false){
+	    if(mine == "false" || loginUser == "false"){
 			output+='<label for="password">패스워드</label><input name="password" type="password" id="password"><p>'
 	    }
 		output+='<button type="button" class="btnReplyDelete" onclick="deleteReply(' +rno + ')" >삭제</button>'

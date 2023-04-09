@@ -54,12 +54,16 @@ public class ReplyController {
     
     //댓글 업데이트
     @RequestMapping(method=RequestMethod.POST,value="update.do")
-    public void update(@ModelAttribute ReplyVO vo, HttpSession session) throws Exception {
+    public boolean update(@ModelAttribute ReplyVO vo, HttpSession session) throws Exception {
     	if(session.getAttribute("userId") != null) {
     		String writerId = (String) session.getAttribute("userId");
             vo.setWriterId(writerId);
     	}  
-        replyService.update(vo);
+    	int sucess =  replyService.update(vo);
+        if(sucess > 0 ) 
+        	return true;
+        else
+        	return false;
     }
     
     //댓글 삭제

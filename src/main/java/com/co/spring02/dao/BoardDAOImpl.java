@@ -74,4 +74,39 @@ public class BoardDAOImpl implements BoardDAO{
         }
 		return false;
 	}
+	
+	//첨부파일 업로드
+	@Override
+	public int insertFile(Map<String, Object> map) throws Exception {
+		sqlSession.insert("boardMapper.insertFile",map);
+		return (int)map.get("FILE_NO");
+	}
+
+	//첨부파일 조회
+	@Override
+	public List<Map<String, Object>> selectFileList(int bno) throws Exception{
+		return sqlSession.selectList("boardMapper.selectFileList", bno);
+	}
+
+	//첨푸파일 다운로드
+	@Override
+	public Map<String, Object> selectFileInfo(Map<String, Object> map) throws Exception {
+		return sqlSession.selectOne("boardMapper.selectFileInfo",map);
+	}
+
+	@Override
+	public void deleteFile(Map<String, Object> map) throws Exception {
+		sqlSession.update("boardMapper.deleteFile",map);
+	}
+
+	//첨부파일 bno 값 설정
+	//여기는 특히 예외를 throw하면 안될것 같은데...
+	@Override
+	public void FileBnoSet(int bno, int fileNo) throws Exception {
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    map.put("BNO", bno);
+	    map.put("FILE_NO", fileNo);
+		sqlSession.update("boardMapper.FileBnoSet",map);		
+	}
+	
 }

@@ -1,6 +1,7 @@
 package com.co.spring02.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -58,5 +59,34 @@ public class BoardServiceImpl implements BoardService {
 	public boolean checkArticle(int bno) throws Exception {
 		return boardDao.checkArticle(bno); 
 	}
+	
+	@Override
+	public List<Map<String, Object>> selectFileList(int bno) throws Exception {
+		return boardDao.selectFileList(bno);
+	}
+
+	@Override
+	public Map<String, Object> selectFileInfo(Map<String, Object> map) throws Exception {
+		return boardDao.selectFileInfo(map);
+	}
+
+	@Override
+	public int insertFile(Map<String, Object> map) throws Exception {
+		return boardDao.insertFile(map);
+	}
+
+	@Override
+	public void deleteFile(Map<String, Object> map) throws Exception {
+		boardDao.deleteFile(map);
+		
+	}
+
+	@Override
+	public void updateBnoToFiles(int bno, List<Integer> attachList) throws Exception {
+		for (int attach : attachList) {
+			boardDao.FileBnoSet(bno, attach);
+		}
+	}
+
 
 }

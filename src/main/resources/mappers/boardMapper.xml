@@ -36,12 +36,15 @@
 	</choose>
 </sql>
 
-<insert id="insert">
+<insert id="insert" useGeneratedKeys="true" keyProperty="bno">
+	<selectKey keyProperty="bno" resultType="int" order="BEFORE">
+		SELECT BOARD_SEQ.NEXTVAL FROM DUAL
+	</selectKey>
 	insert into tbl_board
 	(bno,title,content,writer,writerId,loginUser,password)
 	VALUES
 	(
-	BOARD_SEQ.NEXTVAL,#{title},#{content},#{writer},#{writerId},#{loginUser},#{password}
+	#{bno},#{title},#{content},#{writer},#{writerId},#{loginUser},#{password}
 	)
 
 </insert>
@@ -112,7 +115,7 @@
 
 <update id="updateReply">
 	update tbl_reply
-	set content = #{content}
+	set content = #{content},
 	updatedate = SYSDATE
     WHERE rno = #{rno} and deleted = 'N' and ((writerId = #{writerId} and loginUser = 1) or (loginUser = 0 and password =#{password}))
 </update>
@@ -136,5 +139,58 @@
 		from tbl_reply
 		where bno=#{rbi}
 </select>
+
+
+   <!-- 첨부파일 업로드 -->
+    <insert id="insertFile" parameterType="hashMap">
+    	<selectKey keyProperty="FILE_NO" resultType="int" order="BEFORE">
+			SELECT SEQ_MP_FILE_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO MP_FILE(
+			FILE_NO,
+			ORG_FILE_NAME,
+			STORED_FILE_NAME,
+			FILE_SIZE
+		)VALUES(
+			#{FILE_NO},
+			#{ORG_FILE_NAME},
+			#{STORED_FILE_NAME},
+			#{FILE_SIZE}
+		)
+    </insert>
+    
+    <!-- 첨부파일 bno 설정 -->
+    <update id="FileBnoSet" parameterType="hashMap">
+    	UPDATE MP_FILE SET
+    	BNO = #{BNO}
+    	WHERE FILE_NO = #{FILE_NO} and bno = null
+    </update>
+    
+    <!-- 첨부파일 조회 -->
+    <select id="selectFileList" parameterType="int" resultType="hashMap">
+    	SELECT FILE_NO,
+    		   ORG_FILE_NAME,
+    		   ROUND(FILE_SIZE/1024,1) AS FILE_SIZE,
+    		   DEL_GB
+    	  FROM MP_FILE
+    	 WHERE BNO = #{BNO}
+    	   AND DEL_GB = 'N'
+    	 ORDER BY FILE_NO ASC
+    </select>
+    
+    <!-- 첨부파일 다운 -->
+    <select id="selectFileInfo" parameterType="hashMap" resultType="hashMap">
+    	SELECT 
+    		STORED_FILE_NAME,
+    		ORG_FILE_NAME
+    	FROM MP_FILE
+    	WHERE FILE_NO = #{FILE_NO}
+    </select>
+    
+    <update id="deleteFile" parameterType="hashMap">
+    	UPDATE MP_FILE SET
+    	DEL_GB = 'Y'
+    	WHERE FILE_NO = #{FILE_NO}
+    </update>
 
 </mapper>

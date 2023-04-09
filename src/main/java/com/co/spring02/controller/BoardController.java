@@ -80,11 +80,13 @@ public class BoardController {
             vo.setWriterId(writerId);
             vo.setWriter(writerName);
             vo.setLoginUser(true);
-    	}else {
-    		
+    	}else {		
             vo.setLoginUser(false);
     	}
         boardService.create(vo);
+        int bno = vo.getBno(); //insert후 select Key에 의해 bno값 세팅됨
+        boardService.updateBnoToFiles(bno,vo.getAttachList());
+        
         return "redirect:list.do";
     }
     
