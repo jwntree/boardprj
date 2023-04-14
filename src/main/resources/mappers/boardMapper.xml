@@ -73,6 +73,12 @@
         DELETE FROM tbl_board
         WHERE bno = #{bno} and ((writerId = #{writerId} and loginUser = 1) or (loginUser = 0 and password =#{password}))
 </delete>
+
+<select id="checkUpdateArticlePossible" resultType="int">
+	select COUNT(*) tbl_board
+	WHERE bno = #{bno} and ((writerId = #{writerId} and loginUser = 1) or (loginUser = 0 and password =#{password}))
+</select>
+
 <!-- 페이징 sql -->
 <sql id="pagingHeader">
     SELECT * FROM (
@@ -120,6 +126,7 @@
     WHERE rno = #{rno} and deleted = 'N' and ((writerId = #{writerId} and loginUser = 1) or (loginUser = 0 and password =#{password}))
 </update>
 
+
 <!--
 <delete id="deleteReply">
 	DELETE FROM tbl_reply 
@@ -163,13 +170,14 @@
     <update id="FileBnoSet" parameterType="hashMap">
     	UPDATE MP_FILE SET
     	BNO = #{BNO}
-    	WHERE FILE_NO = #{FILE_NO} and bno = null
+    	WHERE FILE_NO = #{FILE_NO} and bno IS null
     </update>
     
     <!-- 첨부파일 조회 -->
     <select id="selectFileList" parameterType="int" resultType="hashMap">
     	SELECT FILE_NO,
     		   ORG_FILE_NAME,
+    		   STORED_FILE_NAME,
     		   ROUND(FILE_SIZE/1024,1) AS FILE_SIZE,
     		   DEL_GB
     	  FROM MP_FILE
@@ -178,7 +186,17 @@
     	 ORDER BY FILE_NO ASC
     </select>
     
+    <!-- 첨부파일 리스트(fileno only) -->
+        <select id="selectFileNoList" parameterType="int" resultType="int">
+        SELECT FILE_NO
+    	  FROM MP_FILE
+    	 WHERE BNO = #{BNO}
+    	   AND DEL_GB = 'N'
+    	 ORDER BY FILE_NO ASC
+    </select>
+    
     <!-- 첨부파일 다운 -->
+    <!--
     <select id="selectFileInfo" parameterType="hashMap" resultType="hashMap">
     	SELECT 
     		STORED_FILE_NAME,
@@ -186,11 +204,12 @@
     	FROM MP_FILE
     	WHERE FILE_NO = #{FILE_NO}
     </select>
+     -->
     
     <update id="deleteFile" parameterType="hashMap">
     	UPDATE MP_FILE SET
     	DEL_GB = 'Y'
-    	WHERE FILE_NO = #{FILE_NO}
+    	WHERE FILE_NO = #{FILE_NO} and BNO = #{BNO}
     </update>
 
 </mapper>

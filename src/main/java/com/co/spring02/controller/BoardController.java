@@ -1,18 +1,18 @@
 package com.co.spring02.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +23,6 @@ import com.co.spring02.service.ReplyService;
 import com.co.spring02.vo.BoardVO;
 import com.co.spring02.vo.Criteria;
 import com.co.spring02.vo.PageMaker;
-import com.co.spring02.vo.ResponseDto;
 
 @Controller
 @RequestMapping("/board/*")
@@ -85,7 +84,9 @@ public class BoardController {
     	}
         boardService.create(vo);
         int bno = vo.getBno(); //insert후 select Key에 의해 bno값 세팅됨
-        boardService.updateBnoToFiles(bno,vo.getAttachList());
+        if(vo.getAttachList() != null) {
+        	boardService.updateBnoToFiles(bno,vo.getAttachList());
+        }
         
         return "redirect:list.do";
     }
@@ -110,6 +111,8 @@ public class BoardController {
 			//vo.setContent(newContent);
 			model.addAttribute("dto", vo);
 			model.addAttribute("replyCount", replyCount);
+			List<Map<String, Object>> fileList = boardService.selectFileList(bno);
+			model.addAttribute("file", fileList);
 	        return "board/view";
 		}
 	}
@@ -124,6 +127,8 @@ public class BoardController {
 		}
     	BoardVO vo =  boardService.read(bno);
 		model.addAttribute("dto", vo);
+		List<Map<String, Object>> fileList = boardService.selectFileList(bno);
+		model.addAttribute("file", fileList);
         return "board/update";
     }
     
@@ -144,8 +149,63 @@ public class BoardController {
     	if(session.getAttribute("userId") != null) {
     		String writerId = (String) session.getAttribute("userId");
             vo.setWriterId(writerId);
-    	}   	
-    	return ( boardService.update(vo) != 0);
+    	}
+    	
+    	//return ( boardService.update(vo) != 0);
+    	boolean result = boardService.update(vo) != 0;
+    	
+    	//TODO: boardService.update에 같이 통합
+    	//먼저 글내용을 수정후 수정이 성공했다면 첨부파일 처리
+    	//이렇게 처리하는 이유는 update시에 글 수정이 가능한지 검증로직이 들어 있기 때문
+    	//별도로 글 수정이 가능한지 체크하는 쿼리 사용 필요
+    	//이를 위해 checkUpdateArticlePossible을 추가하여 사용할 예정
+    	if(result) {
+    		//파일업로드 처리
+
+    		//deletedfiles: orgfileList - fileList = 삭제된 파일
+    		//newfiles: fileList - orgfileList = 추가된 파일
+    		
+    		BoardVO originalVo =  boardService.read(vo.getBno());
+    		List<Integer> orgfileList = originalVo.getAttachList();
+    		List<Integer> fileList = vo.getAttachList();
+    		
+    		if(orgfileList == null) {
+    			orgfileList = new ArrayList<Integer>();
+    			
+    		}
+    		if(fileList == null) {
+    			fileList = new ArrayList<Integer>();
+    		}   
+    		
+    		
+    		List<Integer> deletedfiles = new ArrayList<Integer>();
+    		deletedfiles.addAll(orgfileList);
+    		deletedfiles.removeAll(fileList);
+
+    		List<Integer> newfiles = new ArrayList<Integer>();
+    		newfiles.addAll(fileList);
+    		newfiles.removeAll(orgfileList);
+
+
+    		
+    		//새로 추가된 파일에 bno 설정
+            if(newfiles != null) {
+            	boardService.updateBnoToFiles(vo.getBno(),newfiles);
+            }
+    		
+    		//삭제된 파일 업데이트
+            if(deletedfiles != null) {
+            	boardService.DeleteFiles(vo.getBno(),deletedfiles);
+            }
+            
+            
+    		//Map map = new HashMap<String, Object>();
+    		//map.put("BNO", vo.getBno());
+    		//map.put("FILE_NO", savedFileName);
+    	}
+    	
+    	return result;
+    	
     }
      
 	
@@ -185,7 +245,7 @@ public class BoardController {
     
 	@RequestMapping(value="viewImage.do", method=RequestMethod.GET)
 	public String viewImage(@RequestParam(defaultValue = "none.jpg") String name, Model model) throws Exception{
-		String filedir = "C:\\resource\\imgs\\";
+		String filedir = "C:\\resource\\files\\";
 		java.io.File file = new java.io.File(filedir+ name);
 		//파일이 존재하면 modle에 넣어줌
 		if(file.exists()) {

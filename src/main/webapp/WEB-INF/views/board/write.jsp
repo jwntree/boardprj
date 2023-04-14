@@ -78,9 +78,21 @@
 					$image.css('width', "auto");
 					$image.css('max-width', "500px");
 				});
+				output = '';
+				output += '<div id="file_upload_' +data.fileNo +'">'
+				output += data.fileName
+				output += '<input type="hidden" name="attachList" value='+ data.fileNo +'>';
+				output += '<button type="button" id="btnDelete" onclick="file_remove(' + data.fileNo + ')">삭제</button>'			
+				output += '</div>'
+				$("#fileUpload").append(output);
+				
 			}
 		});
 	}
+	function file_remove(fileno){
+		$('#file_upload_' + fileno).remove()
+	}
+	
 </script>
 </head>
 <body>
@@ -109,7 +121,11 @@
     <p></p>
     <div>
   		<textarea class="summernote" name="content" id="content"></textarea>    
-	</div>   
+	</div> 
+	<div id="fileUpload">
+		<span>파일 업로드</span>
+		<p></p>
+	</div>  
     <div>
         <button type="button" id="btnSave">확인</button>
     	<button type="button" id="btnCancel">취소</button>

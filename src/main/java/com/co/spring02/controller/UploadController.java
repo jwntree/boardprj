@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +29,8 @@ import net.coobird.thumbnailator.Thumbnailator;
 @Controller
 public class UploadController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
+
 	@Inject
 	BoardService boardService;
 
@@ -65,7 +69,7 @@ public class UploadController {
 			
 			//fileNo를 나중에 설정하는게 맞는 일 일까?
 			//여기선 파일 업로드만하고, 정보 넘겨서 글쓸때 db에 저장하는게 낫지 않을까? 
-			//아니면 별로의 tbl_upload를 만드는건? -> 필요이상으로 복장해질 가능성이 큼
+			//아니면 별도의 tbl_board_files 테이블을 만드는건? -> 구현자체는 깔끔해지지만, 필요이상으로 복장해질 가능성이 있음
 			
 			listMap = new HashMap<String, Object>();
 			listMap.put("ORG_FILE_NAME", originalFileName);
@@ -136,5 +140,7 @@ public class UploadController {
 		
 		return map;
 	}
+	
+	
 
 }

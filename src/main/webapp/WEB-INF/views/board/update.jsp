@@ -104,9 +104,19 @@
 					$image.css('width', "auto");
 					$image.css('max-width', "500px");
 				});
+				output = '';
+				output += '<div id="file_upload_' +data.fileNo +'">'
+				output += data.fileName
+				output += '<input type="hidden" name="attachList" value='+ data.fileNo +'>';
+				output += '<button type="button" id="btnDelete" onclick="file_remove(' + data.fileNo + ')">삭제</button>'			
+				output += '</div>'
+				$("#fileUpload").append(output);
 				
 			}
 		});
+	}
+	function file_remove(fileno){
+		$('#file_upload_' + fileno).remove()
 	}
 </script>
 
@@ -121,12 +131,7 @@
     	<label for="title">제목</label>
     	<input name="title" id="title" value="${dto.title}">
     </div>
-    <div>
-    	<label for="content">내용</label>
-    	<textarea class="summernote" name="content" id="content" rows="10" cols="80"><c:out value="${dto.content}" /></textarea>
-    </div>
-
-    <c:if test="${sessionScope.userId == null}">
+	<c:if test="${sessionScope.userId == null}">
     <div>
     	<label for="writer">이름</label>
     	<input name="writer" disabled="disabled" id="writer" value="${dto.writer}">
@@ -138,7 +143,24 @@
     	<input type="password" name="password" id="password">
     </div>
     </c:if> 
-    
+    <div>
+    	<label for="content">내용</label>
+    	<textarea class="summernote" name="content" id="content" rows="10" cols="80"><c:out value="${dto.content}" /></textarea>
+    </div>
+
+
+	<div id="fileUpload">
+		<c:forEach var="file" items="${file}" varStatus="var">
+			<div id="file_upload_${file.FILE_NO}">
+			${file.ORG_FILE_NAME} (${file.FILE_SIZE}kb)
+			<input type="hidden" name="attachList" value="${file.FILE_NO}">;
+			<button type="button" id="btnDelete" onclick="file_remove(${file.FILE_NO})">삭제</button>			
+			<!--
+			<a href="/files/${file.STORED_FILE_NAME}" id="fileName" download="${file.ORG_FILE_NAME}">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)
+			-->
+			</div>
+		</c:forEach>
+	</div>  
     <div>
         <button type="button" id="btnSave">확인</button>
     	<button type="button" id="btnCancel">취소</button>

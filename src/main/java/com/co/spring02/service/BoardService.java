@@ -30,11 +30,13 @@ public interface BoardService {
 	//첨부파일 조회
 	public List<Map<String, Object>> selectFileList(int bno) throws Exception;
 	//첨푸파일 다운로드
-	public Map<String,Object> selectFileInfo(Map<String,Object> map) throws Exception;
+	//public Map<String,Object> selectFileInfo(Map<String,Object> map) throws Exception;
 	//첨부파일 삭제
-	public void deleteFile(Map<String,Object> map) throws Exception;
+	public void deleteFile(int bno, int fileNo) throws Exception;
 	
 	//첨부파일들의 bno값 설정 
 	public void updateBnoToFiles(int bno, List<Integer> attachList) throws Exception;
+	//리스트에 있는 첨부파일 삭제
+	void DeleteFiles(int bno, List<Integer> attachList) throws Exception;
 
 }

@@ -9,7 +9,7 @@
 <body>
 	<c:if test="${!empty imageName}">
     <div>
-    	<img src ="/imgs/${imageName}">
+    	<img src ="/files/${imageName}">
     </div>
     </c:if>
 </body>

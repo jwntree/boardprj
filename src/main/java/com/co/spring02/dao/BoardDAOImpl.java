@@ -89,13 +89,16 @@ public class BoardDAOImpl implements BoardDAO{
 	}
 
 	//첨푸파일 다운로드
-	@Override
-	public Map<String, Object> selectFileInfo(Map<String, Object> map) throws Exception {
-		return sqlSession.selectOne("boardMapper.selectFileInfo",map);
-	}
+	//@Override
+	//public Map<String, Object> selectFileInfo(Map<String, Object> map) throws Exception {
+	//	return sqlSession.selectOne("boardMapper.selectFileInfo",map);
+	//}
 
 	@Override
-	public void deleteFile(Map<String, Object> map) throws Exception {
+	public void deleteFile(int bno, int fileNo) throws Exception {
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    map.put("BNO", bno);
+	    map.put("FILE_NO", fileNo);
 		sqlSession.update("boardMapper.deleteFile",map);
 	}
 
@@ -107,6 +110,11 @@ public class BoardDAOImpl implements BoardDAO{
 	    map.put("BNO", bno);
 	    map.put("FILE_NO", fileNo);
 		sqlSession.update("boardMapper.FileBnoSet",map);		
+	}
+
+	@Override
+	public List<Integer> selectFileNoList(int bno) throws Exception {
+		return sqlSession.selectList("boardMapper.selectFileNoList", bno);
 	}
 	
 }

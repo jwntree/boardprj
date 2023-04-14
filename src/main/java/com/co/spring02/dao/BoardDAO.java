@@ -31,11 +31,18 @@ public interface BoardDAO {
 	public int insertFile(Map<String, Object> map) throws Exception;
 	//첨부파일 조회
 	public List<Map<String, Object>> selectFileList(int bno) throws Exception;
-	//첨푸파일 다운로드
-	public Map<String,Object> selectFileInfo(Map<String,Object> map) throws Exception;
+	
+	//첨부파일 다운로드
+	//public Map<String,Object> selectFileInfo(Map<String,Object> map) throws Exception;
+	
 	//첨부파일 삭제
-	public void deleteFile(Map<String,Object> map) throws Exception;
+	public void deleteFile(int bno, int fileNo) throws Exception;
 	//첨부파일 bno 설정
 	public void FileBnoSet(int bno, int fileNo) throws Exception;
+	//첨부파일 리스트 (bno only)
+	public List<Integer> selectFileNoList(int bno) throws Exception;
+
+	
+	
 
 }

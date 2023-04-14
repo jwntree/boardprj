@@ -1,5 +1,6 @@
 package com.co.spring02.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public BoardVO read(int bno) throws Exception {
 		BoardVO vo = boardDao.read(bno);
+		List<Integer> attachList = boardDao.selectFileNoList(bno);
+		if(attachList == null) {
+			attachList = new ArrayList<Integer>();
+		}
+		vo.setAttachList(attachList);
 		return vo;
 	}
 
@@ -65,10 +71,11 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.selectFileList(bno);
 	}
 
-	@Override
-	public Map<String, Object> selectFileInfo(Map<String, Object> map) throws Exception {
-		return boardDao.selectFileInfo(map);
-	}
+	
+	//@Override
+	//public Map<String, Object> selectFileInfo(Map<String, Object> map) throws Exception {
+	//	return boardDao.selectFileInfo(map);
+	//}
 
 	@Override
 	public int insertFile(Map<String, Object> map) throws Exception {
@@ -76,15 +83,24 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void deleteFile(Map<String, Object> map) throws Exception {
-		boardDao.deleteFile(map);
+	public void deleteFile(int bno, int fileNo) throws Exception {
+		boardDao.deleteFile(bno,fileNo);
 		
 	}
 
+	//개선필요. 루프대신 update where in 구문을 써야 됨
 	@Override
 	public void updateBnoToFiles(int bno, List<Integer> attachList) throws Exception {
 		for (int attach : attachList) {
 			boardDao.FileBnoSet(bno, attach);
+		}
+	}
+	
+	//개선필요. 루프대신 delete where in 구문을 써야 됨
+	@Override
+	public void DeleteFiles(int bno, List<Integer> attachList) throws Exception {
+		for (int attach : attachList) {
+			boardDao.deleteFile(bno, attach);
 		}
 	}
 

@@ -319,6 +319,18 @@ function deletePost() {
     </div>
 
 
+	<div id="files">
+		<c:forEach var="file" items="${file}" varStatus="var">
+			<div>
+			<%--
+			<input type="hidden" id="FILE_NO" name="FILE_NO_${var.index}" value="${file.FILE_NO }">
+			<input type="hidden" id="FILE_NAME" name="FILE_NAME" value="FILE_NO_${var.index}">
+			--%>
+			<a href="/files/${file.STORED_FILE_NAME}" id="fileName" download="${file.ORG_FILE_NAME}">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)
+		</div>
+		</c:forEach>
+	</div>
+
 	<div id="replybox" style="border: thin">
 		<p>
 			댓글<span>&nbsp;</span><span id="replycnt">0</span>
